@@ -10,9 +10,9 @@ import com.example.eshophandling.R
 
 abstract class SwipeToDeleteCallback(context: Context) : ItemTouchHelper.SimpleCallback(0,   ItemTouchHelper.RIGHT) {
 
-    private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_baseline_delete_forever_24)!!
-    private val intrinsicWidth = deleteIcon.intrinsicWidth
-    private val intrinsicHeight = deleteIcon.intrinsicHeight
+    private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.delete_image)!!
+    private val intrinsicWidth = deleteIcon.intrinsicWidth/5
+    private val intrinsicHeight = deleteIcon.intrinsicHeight/5
     private val background = ColorDrawable()
     private val backgroundColor = Color.parseColor("#f44336")
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }

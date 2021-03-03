@@ -154,6 +154,7 @@ import java.util.*
              frameLayout?.let { cLayout ->
                  cLayout.addView(view, 0)
                  cLayout.bringToFront()
+
                  cLayout.redBannerTxtV.text = value
                  cLayout.BannerConstraint.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark);
 
