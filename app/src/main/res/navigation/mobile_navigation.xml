@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/scannerFragment">
+
+    <fragment
+        android:id="@+id/scannerFragment"
+
+        android:name="com.example.eshophandling.ScannerFragment"
+        android:label="scanner_fragment"
+        tools:layout="@layout/scanner_fragment" />
+    <fragment
+        android:id="@+id/cardsFragment"
+        android:name="com.example.eshophandling.ui.cards.CardsFragment"
+        android:label="fragment_cards"
+        tools:layout="@layout/fragment_cards" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.eshophandling.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <action android:id="@+id/action_global_scannerFragment" app:destination="@id/scannerFragment" app:popUpTo="@id/scannerFragment" />
+    <action android:id="@+id/action_global_cardsFragment" app:destination="@id/cardsFragment" app:popUpTo="@id/cardsFragment"/>
+    <action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment"  app:popUpTo="@id/settingsFragment"/>
+</navigation>

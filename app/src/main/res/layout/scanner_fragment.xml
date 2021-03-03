@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_marginHorizontal="40dp"
+    android:layout_marginVertical="80dp"
+    android:background="@drawable/background_with_shadow"
+    android:layout_height="match_parent"
+    tools:context=".ScannerFragment">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/manuallyText"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="16dp"
+        android:backgroundTint="@color/CoolGray"
+        android:gravity="center"
+        android:text="Ή δώσε το χειροκίνητα"
+        android:textAllCaps="false"
+        android:fontFamily="@font/akkuratllgrk_black"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scanneImage" />
+
+
+
+    <ImageView
+        android:id="@+id/scanneImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/scanner_24"
+        app:tint="@color/logo_color"
+        app:layout_constraintBottom_toTopOf="@+id/manuallyText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/barcodeEdittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@null"
+        android:theme="@style/EditProfileEditTextTheme"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeColor="@color/white"
+        app:boxStrokeWidth="0dp"
+
+        app:hintTextAppearance="@style/small_text_bold1"
+        app:hintTextColor="@color/Gray3"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manuallyText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText3"
+            style="@style/caption_bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="barcode"
+
+            android:inputType="textPersonName"
+            android:maxLength="10"
+            android:paddingStart="0dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <View
+        android:id="@+id/barcode_line"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@drawable/ic_generic_line_gray"
+        app:layout_constraintEnd_toEndOf="@+id/barcodeEdittext"
+        app:layout_constraintStart_toStartOf="@+id/barcodeEdittext"
+        app:layout_constraintTop_toBottomOf="@+id/barcodeEdittext" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/manualOkay"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:backgroundTint="@color/logo_color"
+        android:gravity="center"
+        android:text="αναζήτηση"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barcodeEdittext" />
+
+    <RelativeLayout
+        android:id="@+id/cameraScanner"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/CoolGray"
+            android:layout_above="@+id/buttonsLayout"
+            android:layout_alignParentTop="true"/>
+
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/barcode_scanner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:layout_above="@+id/buttonsLayout"
+            android:layout_alignParentTop="true">
+
+        </com.journeyapps.barcodescanner.DecoratedBarcodeView>
+
+        <LinearLayout
+            android:id="@+id/buttonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/centerHorizont"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:textAllCaps="false"
+                android:text="Προσθήκη"
+                android:id="@+id/add_product"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <Button
+                android:layout_marginHorizontal="5dp"
+                android:textSize="15sp"
+                android:textAllCaps="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:id="@+id/exit_scan"
+                android:text="Έξοδος" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/centerHorizont"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginVertical="4dp"
+            android:layout_marginBottom="50dp"
+            android:layout_alignTop="@id/buttonsLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@id/centerHorizont"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/flash_light"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:backgroundTint="@color/CoolGray"
+                android:background="@drawable/bt_ui"
+                android:src="@drawable/turn_off_flash"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                 />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

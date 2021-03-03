@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:scrollbars="none"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent"
+
+    tools:context=".ui.login.LoginActivity">
+
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="18dp"
+            android:paddingBottom="30dp">
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/username_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@null"
+                android:theme="@style/EditProfileEditTextTheme"
+                app:boxBackgroundColor="@android:color/transparent"
+                app:boxStrokeColor="@color/white"
+                app:boxStrokeWidth="0dp"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black"
+                app:hintTextAppearance="@style/small_text_bold"
+
+                app:hintTextColor="@color/Gray3"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText3"
+                    style="@style/caption_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="συνθηματικό"
+                    android:inputType="textPersonName"
+                    android:maxLength="10"
+                    android:paddingStart="0dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:id="@+id/username_line"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:background="@drawable/ic_generic_line_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/username_container"
+                app:layout_constraintTop_toBottomOf="@+id/username_container" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@null"
+                android:theme="@style/EditProfileEditTextTheme"
+                app:boxBackgroundColor="@android:color/transparent"
+                app:boxStrokeColor="@color/white"
+                app:boxStrokeWidth="0dp"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black"
+                app:hintTextAppearance="@style/small_text_bold"
+
+                app:hintTextColor="@color/Gray3"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/username_container">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText"
+                    style="@style/caption_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="κωδικός"
+                    android:inputType="textPersonName"
+                    android:maxLength="10"
+                    android:paddingStart="0dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:id="@+id/password_line"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:background="@drawable/ic_generic_line_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/password_container"
+                app:layout_constraintTop_toBottomOf="@+id/password_container" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="bottom"
+                android:text="https://"
+                android:textSize="20sp"
+
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/url_container"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/url_container" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/url_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@null"
+                android:theme="@style/EditProfileEditTextTheme"
+                app:boxBackgroundColor="@android:color/transparent"
+                app:boxStrokeColor="@color/white"
+                app:boxStrokeWidth="0dp"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black"
+                app:hintTextAppearance="@style/small_text_bold"
+
+                app:hintTextColor="@color/Gray3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/password_container">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText1"
+                    style="@style/caption_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="URL"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName"
+                    android:paddingStart="0dp"
+                    tools:ignore="RtlSymmetry" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:id="@+id/url_line"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:background="@drawable/ic_generic_line_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/url_container"
+                app:layout_constraintTop_toBottomOf="@+id/url_container" />
+
+
+            <TextView
+                android:id="@+id/submit_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                android:background="@drawable/rebranding_rounded_black"
+                android:paddingVertical="14dp"
+                android:text="Login"
+                android:textAlignment="center"
+                android:textAppearance="@style/button_medium"
+                android:textColor="@color/CoolGray"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/url_container" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/spin_kit"
+                android:visibility="invisible"
+                style="@style/SpinKitView.ThreeBounce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:SpinKit_Color="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/submit_btn"
+                app:layout_constraintEnd_toEndOf="@+id/submit_btn"
+                app:layout_constraintStart_toStartOf="@+id/submit_btn"
+                app:layout_constraintTop_toTopOf="@+id/submit_btn" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group"
+                android:layout_width="38dp"
+                android:layout_height="33dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:constraint_referenced_ids="submit_btn,imageView,url_line,url_container,textView,password_line,password_container,username_line,username_container" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

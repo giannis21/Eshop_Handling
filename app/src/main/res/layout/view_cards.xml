@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="productObj"
+            type="com.example.eshophandling.ui.cards.product_response.Data" />
+
+
+    </data>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:id="@+id/main_container"
+    android:fitsSystemWindows="true"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_with_shadow"
+        android:elevation="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/manuallyText"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+
+                android:backgroundTint="@color/CoolGray"
+                android:fontFamily="@font/akkuratllgrk_black"
+                android:text="σώσε"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:id="@+id/progressBar"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/product"
+                app:layout_constraintEnd_toEndOf="@+id/product"
+                app:layout_constraintStart_toStartOf="@+id/product"
+                app:layout_constraintTop_toTopOf="@+id/product" />
+
+            <ImageView
+                android:id="@+id/product"
+                android:layout_width="182dp"
+                android:layout_height="141dp"
+                android:layout_margin="3dp"
+                android:src="@drawable/logo"
+                app:imageUrl="@{productObj.image}"
+                app:layout_constraintStart_toEndOf="@+id/manuallyText"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                android:text="Ποσότητα"
+                app:layout_constraintEnd_toEndOf="@+id/quantityEdittext"
+                app:layout_constraintStart_toStartOf="@+id/quantityEdittext"
+                app:layout_constraintTop_toBottomOf="@+id/product" />
+
+            <EditText
+                android:id="@+id/quantityEdittext"
+                android:layout_width="0dp"
+                android:text="@{String.valueOf(productObj.quantity)}"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:background="@null"
+                android:inputType="number"
+                app:layout_constraintEnd_toStartOf="@+id/quantity_minus"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/quantity" />
+
+            <View
+                android:id="@+id/quantity_line"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="@drawable/ic_generic_line_black"
+                app:layout_constraintEnd_toEndOf="@+id/quantityEdittext"
+                app:layout_constraintStart_toStartOf="@+id/quantityEdittext"
+                app:layout_constraintTop_toBottomOf="@+id/quantityEdittext" />
+
+            <ImageView
+                android:id="@+id/quantity_minus"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/bt_ui"
+                android:padding="10dp"
+                android:src="@drawable/ic_baseline_remove"
+                app:layout_constraintBottom_toBottomOf="@+id/quantityEdittext"
+                app:layout_constraintEnd_toStartOf="@+id/quantity_plus"
+                app:layout_constraintTop_toTopOf="@+id/quantityEdittext" />
+
+            <ImageView
+                android:id="@+id/quantity_plus"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/bt_ui"
+                android:padding="10dp"
+                android:src="@drawable/ic_baseline_add_24"
+                app:layout_constraintBottom_toBottomOf="@+id/quantity_minus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/quantity_minus" />
+
+            <TextView
+                android:id="@+id/pricetxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:text="Τιμή"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/quantityEdittext"
+                app:layout_constraintTop_toBottomOf="@+id/quantity_line" />
+
+            <EditText
+                android:id="@+id/priceEdittext"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:imeOptions="actionDone"
+                android:text="@{String.valueOf(productObj.price)}"
+
+                app:layout_constraintEnd_toEndOf="@+id/pricetxt"
+                app:layout_constraintStart_toStartOf="@+id/pricetxt"
+                app:layout_constraintTop_toBottomOf="@+id/pricetxt" />
+
+            <View
+                android:id="@+id/price_line"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="@drawable/ic_generic_line_black"
+                app:layout_constraintEnd_toEndOf="@+id/priceEdittext"
+                app:layout_constraintStart_toStartOf="@+id/priceEdittext"
+                app:layout_constraintTop_toBottomOf="@+id/priceEdittext" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Κατάσταση"
+                app:layout_constraintEnd_toEndOf="@+id/priceEdittext"
+                app:layout_constraintStart_toStartOf="@+id/priceEdittext"
+                app:layout_constraintTop_toBottomOf="@+id/price_line" />
+            <View
+                android:id="@+id/switch1_Topline"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:visibility="gone"
+                android:background="@color/CoolGray"
+                app:layout_constraintEnd_toEndOf="@+id/switch1"
+                app:layout_constraintStart_toStartOf="@+id/switch1"
+                app:layout_constraintTop_toTopOf="@+id/switch1" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch1"
+                android:layout_width="0dp"
+                android:layout_height="14dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+
+                app:layout_constraintEnd_toEndOf="@+id/status"
+                app:layout_constraintStart_toStartOf="@+id/status"
+                app:layout_constraintTop_toBottomOf="@+id/status" />
+
+            <View
+                android:id="@+id/switch1_line"
+                android:layout_width="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_height="1dp"
+                android:background="@color/CoolGray"
+                app:layout_constraintEnd_toEndOf="@+id/switch1"
+                app:layout_constraintStart_toStartOf="@+id/switch1"
+                app:layout_constraintTop_toBottomOf="@+id/switch1" />
+            <TextView
+                android:id="@+id/submit_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/rebranding_rounded_black"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:paddingVertical="4dp"
+                android:text="υποβολή"
+
+                android:textAlignment="center"
+                android:textAppearance="@style/button_medium"
+                android:textColor="@color/CoolGray"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@+id/switch1"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/switch1"
+                app:layout_constraintTop_toBottomOf="@+id/switch1" />
+
+            <TextView
+                android:id="@+id/delete_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:alpha="1"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/rebranding_rounded_black"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
+                android:paddingVertical="4dp"
+                android:src="@drawable/ic_delete"
+                android:text="διαγραφή"
+                android:textAppearance="@style/button_medium"
+                android:textColor="@color/CoolGray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/submit_btn"
+                app:layout_constraintStart_toStartOf="@+id/submit_btn"
+                app:layout_constraintTop_toBottomOf="@+id/submit_btn" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</ScrollView>
+</layout>

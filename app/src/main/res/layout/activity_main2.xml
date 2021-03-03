@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <FrameLayout
+        android:id="@+id/frameLayout_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="18dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="-150dp"
+        android:src="@drawable/ellipse2" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="77dp"
+        android:background="@drawable/toolbar_style" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        app:tint="@color/logo_color"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="50sp"
+        android:layout_alignParentTop="true"
+        android:paddingStart="20dp"
+        android:background="@drawable/toolbar_style"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/nexabold"
+        android:text="Scanner"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        tools:ignore="RtlSymmetry" />
+
+    <ImageView
+        android:id="@+id/footer"
+        app:tint="@color/logo_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/footer" />
+
+    <ImageButton
+        android:id="@+id/btHome"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_alignTop="@+id/footer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bt_ui"
+        android:src="@drawable/ic_home" />
+
+    <ImageView
+        android:id="@+id/settingsIcon"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:background="@drawable/circular_item_background_selector"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_alignTop="@+id/footer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:padding="20dp"
+        android:src="@drawable/ic_baseline_settings_24" />
+
+    <ImageView
+        android:id="@+id/scannerIcon"
+        android:background="@drawable/circular_item_background_selector"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_alignTop="@+id/footer"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:padding="20dp"
+        android:src="@drawable/scanner_24"
+        app:tint="@android:color/white" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/footer"
+        android:layout_marginBottom="-50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/mobile_navigation" />
+
+
+</RelativeLayout>
