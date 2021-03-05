@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
@@ -36,7 +37,7 @@ import java.util.*
      private lateinit var viewModelFactory: ViewmodelFactory
      private lateinit var viewModel: LoginViewModel
      private var fieldsFilled=false
-
+     private var isPasswordVisible=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -103,6 +104,21 @@ import java.util.*
                  url_line?.setBackgroundResource(R.drawable.ic_generic_line_gray)
              }
          }
+
+         password_container.setEndIconOnClickListener {
+             isPasswordVisible = !isPasswordVisible
+             if (isPasswordVisible) {
+                 password_container?.editText?.transformationMethod = null
+                 password_container?.editText?.text?.let {
+                     password_container?.editText?.setSelection(it.length)
+                 }
+             } else {
+                 password_container?.editText?.transformationMethod = PasswordTransformationMethod()
+                 password_container?.editText?.text?.let {
+                     password_container?.editText?.setSelection(it.length)
+                 }
+             }
+         }
      }
 
      private fun observeViewModel() {
@@ -139,13 +155,28 @@ import java.util.*
          override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
          override fun afterTextChanged(s: Editable) {
-             val url_container = url_container?.editText?.text.toString().trim()
-             val password_container: String = password_container.editText?.getText().toString().trim()
-             val username_container: String = username_container.editText?.getText().toString().trim()
+             val url_container1 = url_container?.editText?.text.toString().trim()
+             val password_container1: String = password_container.editText?.getText().toString().trim()
+             val username_container1: String = username_container.editText?.getText().toString().trim()
 
-             fieldsFilled = url_container.isNotEmpty() && password_container.isNotEmpty() && username_container.isNotEmpty()
-          }
+             fieldsFilled = url_container1.isNotEmpty() && password_container1.isNotEmpty() && username_container1.isNotEmpty()
+
+             if(password_container1.isEmpty()){
+                 password_container.isEndIconVisible = false
+                 password_container.setEndIconActivated(false)
+              }else {
+                 password_container.isEndIconVisible = true
+                 password_container.setEndIconActivated(true)
+                 if (isPasswordVisible) {
+                     password_container.setEndIconDrawable(R.drawable.ic_eye_show)
+                 } else {
+                     password_container.setEndIconDrawable(R.drawable.ic_eye_hide)
+                 }
+             }
+         }
      }
+
+
 
      fun showBanner(value: String) {
          val view: View = LayoutInflater.from(this).inflate(R.layout.banner_layout, null)

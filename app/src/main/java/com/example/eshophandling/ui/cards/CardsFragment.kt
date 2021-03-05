@@ -176,7 +176,10 @@ class CardsFragment : Fragment(),ItemHandler {
                 verticalrecyclerview!!.visibility=View.GONE
                 showCards=true
 
-                positionstxt.text = "${currentPosition}/${viewModel.allProducts.value?.size}"
+                if (currentPosition>viewModel.allProducts.value?.size ?: 0)
+                    positionstxt.text = "${viewModel.allProducts.value?.size}/${viewModel.allProducts.value?.size}"
+                else
+                    positionstxt.text = "${currentPosition}/${viewModel.allProducts.value?.size}"
             }
 
         }
