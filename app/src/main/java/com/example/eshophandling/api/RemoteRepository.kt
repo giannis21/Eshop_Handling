@@ -5,8 +5,10 @@ package com.example.eshophandling.api
 import com.example.eshophandling.ui.cards.product_response.Product
 import com.example.eshophandling.ui.cards.submit_product.SubmittedProduct
 import com.example.eshophandling.ui.cards.submit_product.SubmittedProductResponse
+import com.example.eshophandling.ui.cards.submit_products.SubmittedProducts
 import com.example.eshophandling.ui.login.loginResponse.loginresponse.CredentialsResponse
 import com.example.eshophandling.ui.login.loginResponse.login.LoginUser
+import okhttp3.ResponseBody
 import retrofit2.Response
 
 class RemoteRepository(private val my_Api: ApiClient,var apiClientBasic: ApiClientBasicAuth) {
@@ -26,6 +28,10 @@ class RemoteRepository(private val my_Api: ApiClient,var apiClientBasic: ApiClie
     suspend fun submitProduct(product: SubmittedProduct): Response<SubmittedProductResponse> {
         return my_Api.submitProduct(product.id.toString(),product)
     }
+    suspend fun submitProducts(products: SubmittedProducts): Response<ResponseBody> {
+        return my_Api.submitProducts(products)
+    }
+
 
 
 }

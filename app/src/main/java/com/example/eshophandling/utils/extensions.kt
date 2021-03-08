@@ -1,7 +1,6 @@
 package com.example.eshophandling.utils
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.os.SystemClock
 import android.view.View
@@ -39,6 +38,20 @@ fun getDateInMilli(date: String): Long {
         0
     }
 }
+
+ fun milliToDate(milliseconds: String): String{
+     // Create a DateFormatter object for displaying date in specified format.
+
+     // Create a DateFormatter object for displaying date in specified format.
+     val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+
+     // Create a calendar object that will convert the date and time value in milliseconds to date.
+
+     // Create a calendar object that will convert the date and time value in milliseconds to date.
+     val calendar = Calendar.getInstance()
+     calendar.timeInMillis = milliseconds.toLong()
+     return formatter.format(calendar.time)
+ }
 
 fun View.hideKeyboard() {
     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

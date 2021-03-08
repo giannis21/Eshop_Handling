@@ -1,5 +1,7 @@
 package com.example.eshophandling.ui.cards
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -7,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -25,6 +28,9 @@ import com.example.eshophandling.utils.setSafeOnClickListener
 import com.example.tvshows.ui.nowplaying.ViewmodelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.fragment_cards.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import java.util.*
 
 
@@ -46,23 +52,23 @@ class CardsFragment : Fragment(),ItemHandler {
 
     var verticalrecyclerview: RecyclerView? = null
     var mAdapterVertical: CardAdapter? = null
-
+    private val job = SupervisorJob()
+    private val defaultScope = CoroutineScope(Dispatchers.Default + job)
     private lateinit var viewModel: SharedViewModel
     private lateinit var viewModelFactory: ViewmodelFactory
     private var currentPosition=0
     private var adapterCountItems=0
-    companion object{
-        var firstObject=true
-    }
+    var showCards=true
 
-    override fun onResume() {
-        super.onResume()
-        firstObject=true
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        firstObject=false
+        viewModel.updated.postValue(false)
+        viewModel.productRetrieved.postValue(false)
+        viewModel.noInternetException.postValue(false)
+        viewModel.error.postValue(false)
+        viewModel.productExists.postValue(false)
+        viewModel.productNotFound.postValue(false)
     }
 
 
@@ -73,6 +79,7 @@ class CardsFragment : Fragment(),ItemHandler {
         return inflater.inflate(R.layout.fragment_cards, container, false)
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -99,14 +106,14 @@ class CardsFragment : Fragment(),ItemHandler {
 
         val dataArticles = ArrayList<Data>()
         var a=2.toString()
-        var product=Data(1, "1", 2, 30, a, 1)
-        var product1=Data(2, "1", 1, 45, a, 1)
-        var product2=Data(3, "1", 1, 40, a, 1)
-        var product3=Data(4, "1", 1, 23, a, 1)
-        var product4=Data(5, "1", 1, 43, a, 0)
-        var product5=Data(11, "1", 1, 30, a, 0)
-        var product6=Data(122, "1", 1, 45, a, 0)
-        var product7=Data(32, "1", 1, 40, a, 0)
+        var product=Data(1, "1", "2", "30",null, a, 1)
+        var product1=Data(2, "1", "1", "30", null,a, 1)
+        var product2=Data(3, "1", "1", "30", null,a, 1)
+        var product3=Data(4, "1", "1", "30", null,a, 1)
+        var product4=Data(5, "1", "1", "43", null,a, 0)
+        var product5=Data(11, "1", "1", "30", null,a, 0)
+        var product6=Data(122, "1", "1", "45", null,a, 0)
+        var product7=Data(32, "1", "1", "40", null,a, 0)
 
         dataArticles.add(product)
         dataArticles.add(product1)
@@ -117,29 +124,27 @@ class CardsFragment : Fragment(),ItemHandler {
         dataArticles.add(product6)
         dataArticles.add(product7)
 
-        viewModel.allProducts.value = dataArticles
+       // viewModel.allProducts.value = dataArticles
         mAdapter = CardAdapter(requireContext(), viewModel.allProducts.value
-                ?: mutableListOf(), viewModel)
+                ?: mutableListOf(), defaultScope)
         mAdapter!!.itemHandler=this
         recyclerview!!.adapter = mAdapter
 
-        mAdapterVertical = CardAdapter(requireContext(), viewModel.allProducts.value
-                ?: mutableListOf(), viewModel, true)
+        mAdapterVertical = CardAdapter(requireContext(), viewModel.allProducts.value ?: mutableListOf(), defaultScope, true)
         verticalrecyclerview!!.adapter = mAdapterVertical
+        mAdapterVertical!!.itemHandler=this
         initSwipe()
 
         val snapHelper: SnapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(recyclerview)
 
-        positionstxt.text = "1/${mAdapter?.itemCount}"
+        if(mAdapter?.itemCount!! > 0)
+          positionstxt.text = "1/${mAdapter?.itemCount}"
 
         show_bottomsheet.setSafeOnClickListener {
             showDialog()
         }
 
-        if(mAdapter!!.itemCount == 0){
-        //    positionstxt.visibility=View.GONE
-        }
 
         recyclerview?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -160,23 +165,27 @@ class CardsFragment : Fragment(),ItemHandler {
             }
         })
 
-        var showCards=true
+
         show_list.setOnClickListener {
             if(showCards){
+                showCards=false
                 horizontalRecyclerGroup.visibility=View.GONE
                 verticalrecyclerview!!.visibility=View.VISIBLE
-                showCards=false
 
+                mAdapterVertical!!.updateList(viewModel.allProducts.value?.toList()!!)
+                show_list.setImageResource(R.drawable.cards_icon)
             }else{
+                showCards=true
                 if(mAdapter!!.itemCount == 0)
                     horizontalRecyclerGroup.visibility=View.GONE
                 else
                     horizontalRecyclerGroup.visibility=View.VISIBLE
 
                 verticalrecyclerview!!.visibility=View.GONE
-                showCards=true
 
-                if (currentPosition>viewModel.allProducts.value?.size ?: 0)
+                show_list.setImageResource(R.drawable.ic_list)
+
+                if (currentPosition > viewModel.allProducts.value?.size ?: 0)
                     positionstxt.text = "${viewModel.allProducts.value?.size}/${viewModel.allProducts.value?.size}"
                 else
                     positionstxt.text = "${currentPosition}/${viewModel.allProducts.value?.size}"
@@ -191,15 +200,26 @@ class CardsFragment : Fragment(),ItemHandler {
                 if(recyclerview!!.isVisible)
                     positionstxt.visibility = View.VISIBLE
             }
+            viewModel.allProducts.value?.forEachIndexed { index, data ->
+                println("data"+data.quantity_minus)
+            }
+            if(it.size>=2)
+                show_bottomsheet.visibility = View.VISIBLE
+            else
+                show_bottomsheet.visibility = View.GONE
 
+            if(it.size>=1){
+                show_list.visibility=View.VISIBLE
+            }else
+                show_list.visibility=View.GONE
 
             if (it.isEmpty()) {
                 mAdapter?.clear()
                 mAdapterVertical?.clear()
                 empty_placeholder.visibility = View.VISIBLE
             } else {
-                mAdapter?.swap(it)
-                mAdapterVertical?.swap(it)
+                mAdapter?.submitList(it)
+                mAdapterVertical?.submitList(it)
                 empty_placeholder.visibility = View.GONE
             }
 
@@ -227,7 +247,29 @@ class CardsFragment : Fragment(),ItemHandler {
         val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.layout_bottom_sheet, null)
         dialog.setContentView(view)
+        dialog.findViewById<TextView>(R.id.delete_cards)?.setSafeOnClickListener {
+            showconfirmDialog(msg = "Είσαι σίγουρος πως θες να διαγράψεις όλα τα προϊόντα;"){
+                if(it){
+                    viewModel.deleteAllProducts()
+                    (activity as MainActivity?)?.showBanner("Το προϊόντα διαγράφηκαν επιτυχώς!", true)
+                }
+                dialog.dismiss()
+            }
 
+        }
+        dialog.findViewById<TextView>(R.id.submit_all_btn)?.setSafeOnClickListener {
+            showconfirmDialog(msg = "Υποβολή όλων των προϊόντων;"){
+                if(it){
+                    (activity as MainActivity?)?.showBanner("περιμενω να στειλεις το API!!!!!!!!!!!!")
+                  //  viewModel.submitAllProducts(showCards){
+                  //      (activity as MainActivity?)?.showBanner("Το προϊόντα υποβλήθηκαν επιτυχώς!", true)
+                  //  }
+
+                }
+                dialog.dismiss()
+            }
+
+        }
         dialog.show()
     }
 
@@ -254,6 +296,7 @@ class CardsFragment : Fragment(),ItemHandler {
         viewModel.submitProduct(prod_to_be_submitted)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onDelete(id: Int) {
         positionstxt.text = "${currentPosition}/${viewModel.allProducts.value?.size?.minus(1)}"
         viewModel.deleteProduct(id)
@@ -262,16 +305,47 @@ class CardsFragment : Fragment(),ItemHandler {
     override fun onRefresh(position: Int, id: Int, quantity: String, price: String, isEnabled1: Boolean) {
         val product= viewModel.allProducts.value?.find { it.id == id }
 
-        product?.quantity=quantity.toInt()
-        product?.price = price.toInt()
+        product?.quantity=quantity
+        product?.price = price
         product?.status= if(isEnabled1) 1 else 0
 
         product?.let {
             viewModel.allProducts.value?.set(position, it)
         }
-        mAdapter?.swap(viewModel.allProducts.value!!)
+        mAdapter?.submitList(viewModel.allProducts.value!!)
 
     }
 
+    override fun onRefreshQuantity(position: Int, id: Int, quantity: String) {
+        val product= viewModel.allProducts.value?.find { it.id == id }
+
+        product?.quantity_minus=quantity.toInt().minus(1).toString()
+
+        product?.let {
+            viewModel.allProducts.value?.set(position, it)
+        }
+        mAdapterVertical?.submitList(viewModel.allProducts.value!!)
+        viewModel.allProducts.value?.forEachIndexed { index, data ->
+            println("data"+data.quantity_minus)
+        }
+    }
+
+    fun showconfirmDialog(msg:String,callback:((Boolean) -> Unit)){
+        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setMessage(msg)
+        alertDialogBuilder.setCancelable(true)
+
+        alertDialogBuilder.setPositiveButton("Ναι") { dialog, _ ->
+            dialog.cancel()
+            callback?.invoke(true)
+        }
+        alertDialogBuilder.setNegativeButton("Όχι") { dialog, _ ->
+            dialog.cancel()
+            callback?.invoke(false)
+        }
+
+        val alertDialog: AlertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
 
 }

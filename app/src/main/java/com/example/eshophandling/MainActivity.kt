@@ -1,7 +1,6 @@
 package com.example.eshophandling
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,24 +8,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.example.eshophandling.ui.login.LoginActivity
-import io.reactivex.internal.operators.maybe.MaybeDoAfterSuccess
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.banner_layout.view.*
+import kotlinx.android.synthetic.main.scanner_fragment.*
+
 
 class MainActivity : AppCompatActivity() {
 
     companion object{
         var errorListener: ((Int) ->Unit) ?=null
+        var hideKeyboardListener: ((Boolean) ->Unit)? = null
+        var screenInches:Double=0.0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
+        val dm = resources.displayMetrics
+
+        val density = dm.density * 160.toDouble()
+        val x = Math.pow(dm.widthPixels / density, 2.0)
+        val y = Math.pow(dm.heightPixels / density, 2.0)
+        screenInches = Math.sqrt(x + y)
+
         setStatusBarColor()
         scannerIcon.setOnClickListener {
                 tvTitle.text = "Scanner"
@@ -40,11 +49,27 @@ class MainActivity : AppCompatActivity() {
             tvTitle.text = "Ρυθμίσεις"
             findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_settingsFragment)
         }
+        hideKeyboardListener = {
+            if(it){
+                footer.visibility=View.GONE
+                scannerIcon.visibility=View.GONE
+                settingsIcon.visibility=View.GONE
+                btHome.visibility=View.GONE
+            }else{
+                Handler(Looper.getMainLooper()).postDelayed({
+                    footer.visibility = View.VISIBLE
+                    scannerIcon.visibility = View.VISIBLE
+                    settingsIcon.visibility = View.VISIBLE
+                    btHome.visibility = View.VISIBLE
+                }, 100)
 
+            }
+
+        }
         errorListener = { error ->
             when (error) {
                 401 -> {
-                    val intent = Intent (this, LoginActivity::class.java)
+                    val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
@@ -54,6 +79,9 @@ class MainActivity : AppCompatActivity() {
                 else -> {}
             }
         }
+
+
+
     }
 
     private fun setStatusBarColor() {
@@ -63,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.logo_color)
     }
 
-    fun showBanner(value: String,success: Boolean = false) {
+    fun showBanner(value: String, success: Boolean = false) {
         val view: View = LayoutInflater.from(this).inflate(R.layout.banner_layout, null)
 
         runOnUiThread {
@@ -73,11 +101,12 @@ class MainActivity : AppCompatActivity() {
                 cLayout.redBannerTxtV.text = value
 
                 if(!success){
-                    cLayout.BannerConstraint.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark)
-                    cLayout.imageView.setBackgroundResource(R.drawable.ic_baseline_close_24)
+                    cLayout.cardView.backgroundTintList = ContextCompat.getColorStateList(this, R.color.LightRed)
+                    cLayout.imageView.background = ContextCompat.getDrawable(this, R.drawable.ic_baseline_close_24)
+
                 }else{
-                    cLayout.BannerConstraint.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_green_dark)
-                    cLayout.imageView.setBackgroundResource(R.drawable.ic_baseline_check_24)
+                    cLayout.cardView.backgroundTintList = ContextCompat.getColorStateList(this, R.color.success_color)
+                    cLayout.imageView.background = ContextCompat.getDrawable(this, R.drawable.ic_baseline_check_24)
                 }
 
                 Handler(Looper.getMainLooper()).postDelayed({

@@ -24,6 +24,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="80dp"
         android:layout_marginBottom="8dp"
+
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/show_list"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,17 +66,19 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="50dp"
+        app:tint="?attr/colorControlNormal"
         android:src="@drawable/ic_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/show_bottomsheet"
-        android:layout_width="47dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="39dp"
+        android:layout_height="33dp"
         android:layout_marginStart="16dp"
-        android:src="@drawable/ic_list"
+        android:layout_marginBottom="50dp"
+        app:tint="?attr/colorControlNormal"
+        android:src="@drawable/action_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

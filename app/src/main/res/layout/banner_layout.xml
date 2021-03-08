@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-         android:id="@+id/mainBannerConstraint"
-
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_height="wrap_content">
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/cardView"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="12dp"
+    android:elevation="10dp"
+    android:backgroundTint="@color/LightRed">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/BannerConstraint"
+        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="16dp"
-        android:background="@drawable/elevation_color"
-        android:paddingBottom="16dp"
-        android:paddingStart="16dp"
 
-        android:paddingTop="12dp"
-        android:paddingEnd="16dp"
-        android:elevation="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:tint="@color/white"
+            tools:src="@drawable/ic_baseline_check_24"
             app:layout_constraintBottom_toBottomOf="@+id/redBannerTxtV"
             app:layout_constraintEnd_toEndOf="@+id/BannerConstraint"
             app:layout_constraintTop_toTopOf="@+id/redBannerTxtV"
@@ -52,5 +48,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+
 

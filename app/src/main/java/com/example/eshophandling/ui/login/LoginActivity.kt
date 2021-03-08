@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.alertlocation_kotlin.utils.Preferences
 import com.example.alertlocation_kotlin.utils.Preferences.BaseUrl
 import com.example.alertlocation_kotlin.utils.Preferences.lastLoginDate
 import com.example.alertlocation_kotlin.utils.Preferences.token
@@ -27,6 +28,7 @@ import com.example.eshophandling.api.RemoteRepository
 import com.example.eshophandling.api.NetworkConnectionIncterceptor
 import com.example.eshophandling.utils.getDateInMilli
 import com.example.eshophandling.utils.hideKeyboard
+import com.example.eshophandling.utils.milliToDate
 import com.example.tvshows.ui.nowplaying.ViewmodelFactory
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.banner_layout.view.*
@@ -43,9 +45,18 @@ import java.util.*
         setContentView(R.layout.activity_login)
         setStatusBarColor()
         window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        com.example.alertlocation_kotlin.utils.Preferences.sharedPref = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        Preferences.sharedPref = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
 
-        if(token?.isNotEmpty()!!){
+        val diff: Long = Calendar.getInstance().timeInMillis - getDateInMilli(lastLoginDate!!)
+        val seconds = diff / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+
+        println("days--- $days")
+
+
+        if(token?.isNotEmpty()!! && days <= 20){
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }else{
@@ -124,7 +135,7 @@ import java.util.*
      private fun observeViewModel() {
          viewModel.LoggedIn.observe(this, Observer {
              if(it){
-                 lastLoginDate = Calendar.getInstance().timeInMillis.toString()
+                 lastLoginDate = milliToDate(Calendar.getInstance().timeInMillis.toString())
                  BaseUrl = viewModel.validUrl.value
                  startActivity(Intent(this, MainActivity::class.java))
              }
@@ -187,7 +198,7 @@ import java.util.*
                  cLayout.bringToFront()
 
                  cLayout.redBannerTxtV.text = value
-                 cLayout.BannerConstraint.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark);
+                 cLayout.cardView.backgroundTintList = ContextCompat.getColorStateList(this, R.color.LightRed);
 
                  cLayout.imageView.setBackgroundResource(R.drawable.ic_baseline_close_24)
                  Handler(Looper.getMainLooper()).postDelayed({

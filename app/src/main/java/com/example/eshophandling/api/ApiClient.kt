@@ -1,18 +1,18 @@
 package com.example.eshophandling.api
 
- import android.content.Intent
  import com.example.alertlocation_kotlin.utils.Preferences.token
  import com.example.eshophandling.MainActivity.Companion.errorListener
- import com.example.eshophandling.ui.cards.product_response.Data
  import com.example.eshophandling.ui.cards.product_response.Product
  import com.example.eshophandling.ui.cards.submit_product.SubmittedProduct
  import com.example.eshophandling.ui.cards.submit_product.SubmittedProductResponse
+ import com.example.eshophandling.ui.cards.submit_products.SubmittedProducts
  import com.example.eshophandling.ui.login.loginResponse.login.LoginUser
  import com.example.eshophandling.ui.login.loginResponse.logoutresponse.LogoutResponse
  import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
  import okhttp3.logging.HttpLoggingInterceptor
+
  import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -41,6 +41,10 @@ interface ApiClient {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @PUT("api/rest_admin/products/{id}")
     suspend fun submitProduct(@Path("id") id: String, @Body product: SubmittedProduct): Response<SubmittedProductResponse>
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @PUT("api/rest_admin/products/")
+    suspend fun submitProducts(@Body products: SubmittedProducts): Response<ResponseBody>
 
     companion object {
 

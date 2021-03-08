@@ -1,24 +1,27 @@
 package com.example.eshophandling
 
 import android.content.Context
-import android.util.Base64
+import androidx.core.os.trace
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.alertlocation_kotlin.utils.Preferences
+import com.example.alertlocation_kotlin.utils.Preferences.username
 import com.example.eshophandling.api.NoInternetException
 import com.example.eshophandling.api.RemoteRepository
 import com.example.eshophandling.ui.Loading_dialog
 import com.example.eshophandling.ui.cards.product_response.Data
 import com.example.eshophandling.ui.cards.submit_product.SubmittedProduct
-import com.example.eshophandling.ui.login.loginResponse.login.LoginUser
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.UnsupportedEncodingException
+import com.example.eshophandling.ui.cards.submit_products.Data1
+import com.example.eshophandling.ui.cards.submit_products.SubmittedProducts
+import com.example.eshophandling.utils.milliToDate
+import kotlinx.coroutines.*
+import java.io.IOException
+import java.util.*
 
 class SharedViewModel(var remoteRepository: RemoteRepository, var context: Context) : ViewModel() {
 
     var allProducts: MutableLiveData<MutableList<Data>>
+    var allProducts_initial: MutableLiveData<MutableList<Data>>
     var loading = MutableLiveData<Boolean>(false)
     var noInternetException = MutableLiveData<Boolean>(false)
     var error = MutableLiveData<Boolean>(false)
@@ -27,18 +30,30 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
     var productExists = MutableLiveData<Boolean>(false)
     var productNotFound=MutableLiveData(false)
     val dialog: Loading_dialog
+    var job:Job= Job()
 
     init {
         allProducts = MutableLiveData<MutableList<Data>>()
         allProducts.value= mutableListOf()
+
+        allProducts_initial = MutableLiveData<MutableList<Data>>()
+        allProducts_initial.value= mutableListOf()
+
         dialog = Loading_dialog(context)
     }
 
+    val exceptionHandler = CoroutineExceptionHandler { _, e ->
+        dialog.hideLoadingDialog()
+        noInternetException.postValue(true)
+        job.cancel()
+    }
+
+    @Throws(IOException::class)
     fun getProduct(barcode: String?) {
         loading.postValue(true)
 
         dialog.displayLoadingDialog()
-        viewModelScope.launch(Dispatchers.Default) {
+        job = viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
                 remoteRepository.getProduct(barcode ?: "0002")
             }.onFailure {
@@ -46,9 +61,6 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
                 loading.postValue(false)
                 dialog.hideLoadingDialog()
 
-                if(it is NoInternetException){
-                    noInternetException.postValue(true)
-                }
 
             }.onSuccess {
                dialog.hideLoadingDialog()
@@ -60,9 +72,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
 
                    if(it.code() == 404){
                        productNotFound.postValue(true)
-                   }else if(it.code() == 401){
-
-                   }else{
+                   } else{
                        error.postValue(true)
                    }
                 }
@@ -76,9 +86,14 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
         if(product1 == null)
         {
             productRetrieved.postValue(true)
-            val tempList=allProducts.value
-            tempList?.add(product)
+            val tempList=allProducts.value!!
+            tempList.add(product)
             allProducts.postValue(tempList)
+
+            viewModelScope.launch(Dispatchers.Default) {
+                allProducts_initial.postValue(tempList)
+            }
+
         }else{
             productExists.postValue(true)
         }
@@ -88,7 +103,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
     fun submitProduct(product: SubmittedProduct) {
         dialog.displayLoadingDialog()
 
-        viewModelScope.launch(Dispatchers.Default) {
+       job= viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
                 remoteRepository.submitProduct(product)
             }.onFailure {
@@ -97,9 +112,6 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
                 loading.postValue(false)
                 dialog.hideLoadingDialog()
 
-                if(it is NoInternetException){
-                    noInternetException.postValue(true)
-                }
 
             }.onSuccess {
                 loading.postValue(false)
@@ -127,7 +139,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
     }
 
     fun removeItemAt(position: Int) {
-           var product = allProducts.value?.get(position)
+           val product = allProducts.value?.get(position)
            product?.let {
                allProducts.value?.remove(it)
                allProducts.notifyObserver()
@@ -135,7 +147,62 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
 
     }
 
-  }
+    fun deleteAllProducts() {
+        allProducts.value?.clear()
+        allProducts.notifyObserver()
+    }
+
+
+    fun submitAllProducts(CardsShown: Boolean,productsSubmitted: (() -> Unit)?=null) {
+        dialog.displayLoadingDialog()
+        println("carddss $CardsShown")
+        viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
+            runCatching {
+                remoteRepository.submitProducts(SubmittedProducts(getSubmittedProducts(CardsShown),username!!, milliToDate(Calendar.getInstance().timeInMillis.toString())))
+            }.onFailure {
+
+                error.value= true
+                loading.postValue(false)
+                dialog.hideLoadingDialog()
+
+            }.onSuccess {
+                loading.postValue(false)
+                dialog.hideLoadingDialog()
+                productsSubmitted?.invoke()
+//                if(it.isSuccessful){
+//                    if(it.body()!!.success == 1 )
+//                        updated.postValue(true)
+//                }else{
+//                    error.postValue(true)
+//                }
+            }
+        }
+    }
+
+    private suspend fun getSubmittedProducts(CardsShown: Boolean): MutableList<Data1> {
+        val list_to_be_saved= mutableListOf<Data1>()
+
+        if(CardsShown){
+            allProducts.value!!.forEach {
+                list_to_be_saved.add(Data1(it.id,it.price,it.quantity,null,it.sku,it.status))
+            }
+
+        }else{
+            allProducts.value!!.forEachIndexed { index, data ->
+                val initial_quantity_value= allProducts_initial.value?.get(index)?.quantity
+                val new_value= allProducts.value?.get(index)?.quantity
+
+                val saved_quantity=initial_quantity_value?.toInt()!! -  data.quantity_minus?.toInt()!!
+
+                list_to_be_saved.add(Data1(data.id,data.price,saved_quantity.toString(),saved_quantity.toString(),data.sku,data.status))
+            }
+
+        }
+        return list_to_be_saved
+    }
+
+
+}
 
 
 

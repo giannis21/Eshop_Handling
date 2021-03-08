@@ -24,7 +24,7 @@
         android:layout_marginBottom="3dp"
         android:gravity="center"
         android:padding="10dp"
-        android:text="μισό λεπτό.."
+        android:text="Περιμένετε.."
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"

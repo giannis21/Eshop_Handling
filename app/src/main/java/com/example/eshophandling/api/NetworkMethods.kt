@@ -9,30 +9,15 @@ import android.os.Build
 
 object netMethods {
 
-    fun hasInternet(applicationContext: Context, return_boolean_state:Boolean) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (!isInternetAvailable1(applicationContext)) {
-                 throw NoInternetException("No internet connection")
-             }
-        } else {
+    fun hasInternet(applicationContext: Context) {
             if (!isInternetAvailable(applicationContext)) {
                 throw NoInternetException("No internet connection")
-            }
-        }
-
+             }
     }
+
+
 
     fun isInternetAvailable(applicationContext: Context): Boolean {
-
-        val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        connectivityManager?.activeNetworkInfo.also {
-            return it != null && it.isConnected
-        }
-
-
-    }
-
-    fun isInternetAvailable1(applicationContext: Context): Boolean {
         var result = false
         val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
 

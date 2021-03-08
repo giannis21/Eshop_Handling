@@ -12,7 +12,9 @@ import com.example.alertlocation_kotlin.utils.Preferences.useBearer
 import com.example.eshophandling.api.NoInternetException
 import com.example.eshophandling.api.RemoteRepository
 import com.example.eshophandling.ui.login.loginResponse.login.LoginUser
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.UnsupportedEncodingException
 
@@ -25,12 +27,17 @@ class LoginViewModel(var remoteRepository: RemoteRepository, var context: Contex
     var loading = MutableLiveData<Boolean>(false)
     var noInternetException = MutableLiveData<Boolean>(false)
     var error :MutableLiveData<Boolean> ?=null
+    var job:Job=Job()
+    val exceptionHandler = CoroutineExceptionHandler { _, e ->
 
+        noInternetException.postValue(true)
+        job.cancel()
+    }
     fun getCredentials(username: String, password: String,url: String) {
         Preferences.sharedPref = context.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         loading.postValue(true)
 
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
                 useBearer = false
                 remoteRepository.getCredentials(getAuthToken())
@@ -62,7 +69,7 @@ class LoginViewModel(var remoteRepository: RemoteRepository, var context: Contex
 
     fun login(username: String ="admin", password: String  ="admin") {
         useBearer = true
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
                 remoteRepository.login(LoginUser("admin", "qwe123!"))
             }.onFailure {
@@ -76,7 +83,6 @@ class LoginViewModel(var remoteRepository: RemoteRepository, var context: Contex
                 loading.postValue(false)
 
                 if(it.isSuccessful){
-                    //token=it.body()!!.access_token
                     LoggedIn.postValue(true)
                 }else{
                     error?.postValue(true)

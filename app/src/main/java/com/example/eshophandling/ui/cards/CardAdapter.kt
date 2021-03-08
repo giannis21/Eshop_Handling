@@ -1,7 +1,9 @@
 package com.example.eshophandling.ui.cards
 
 import android.content.Context
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -14,8 +16,13 @@ import com.example.eshophandling.databinding.ViewListBinding
 import com.example.eshophandling.ui.cards.product_response.Data
 import com.example.eshophandling.ui.cards.product_response.Product
 import com.example.eshophandling.utils.setSafeOnClickListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
-class CardAdapter(var context: Context, products: MutableList<Data>, var viewModel: SharedViewModel,var vertical:Boolean=false) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+class CardAdapter(var context: Context, products: MutableList<Data>, private var coroutineScope: CoroutineScope, var vertical: Boolean = false) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     private val products_list = mutableListOf<Data>()
@@ -25,6 +32,7 @@ class CardAdapter(var context: Context, products: MutableList<Data>, var viewMod
 
     init {
         products_list.addAll(products)
+
     }
 
 
@@ -65,6 +73,33 @@ class CardAdapter(var context: Context, products: MutableList<Data>, var viewMod
 
         fun bind(holder: VerticalViewHolder, position: Int) {
             holder.viewListBinding.product = products_list[position]
+            holder.viewListBinding.minusButton.setOnClickListener {
+
+                if(holder.viewListBinding.ammountText.text.toString().toInt().minus(1) == 0) {
+                    holder.viewListBinding.ammountText.text = "1"
+                    products_list[position].quantity_minus = "1"
+                    coroutineScope.launch(Dispatchers.Default) {
+                        itemHandler?.onRefreshQuantity(holder.adapterPosition, products_list[holder.adapterPosition].id, products_list[holder.adapterPosition].quantity_minus!!)
+                    }
+                }else{
+                    coroutineScope.launch(Dispatchers.Default) {
+                        itemHandler?.onRefreshQuantity(holder.adapterPosition, products_list[holder.adapterPosition].id, products_list[holder.adapterPosition].quantity_minus!!)
+                    }
+                    products_list[position].quantity_minus= holder.viewListBinding.ammountText.text.toString().toInt().minus(1).toString()
+                    holder.viewListBinding.ammountText.text=  holder.viewListBinding.ammountText.text.toString().toInt().minus(1).toString()
+                }
+            }
+
+            holder.viewListBinding.plusButton.setOnClickListener {
+                holder.viewListBinding.ammountText.text=  holder.viewListBinding.ammountText.text.toString().toInt().plus(1).toString()
+                products_list[position].quantity_minus= holder.viewListBinding.ammountText.text.toString().toInt().plus(1).toString()
+
+                coroutineScope.launch(Dispatchers.Default) {
+                    itemHandler?.onRefreshQuantity(holder.adapterPosition,products_list[holder.adapterPosition].id,products_list[holder.adapterPosition].quantity_minus ?: "1")
+                }
+
+
+            }
         }
 
     }
@@ -77,6 +112,9 @@ class CardAdapter(var context: Context, products: MutableList<Data>, var viewMod
             holder.viewCardsBinding.priceEdittext.setSelection(holder.viewCardsBinding.priceEdittext.text.length)
             holder.viewCardsBinding.priceEdittext.setRawInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
             holder.viewCardsBinding.priceEdittext.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+
+            holder.viewCardsBinding.quantityEdittext.addTextChangedListener(CustomEditTextListener(holder,"quantity"))
+            holder.viewCardsBinding.priceEdittext.addTextChangedListener(CustomEditTextListener(holder,"price"))
 
             holder.viewCardsBinding.quantityPlus.setOnClickListener {
 
@@ -92,14 +130,6 @@ class CardAdapter(var context: Context, products: MutableList<Data>, var viewMod
 
             }
 
-            if (holder.adapterPosition == 0) {
-                if (CardsFragment.firstObject) {
-                    //   holder.viewCardsBinding.deleteCard.alpha = 1f
-                    CardsFragment.firstObject = false
-                } else {
-                    //    holder.viewCardsBinding.deleteCard.alpha = 0.5f
-                }
-            }
 
             if(products_list[position].status == 1 ){
                 holder.viewCardsBinding.switch1.isChecked=true
@@ -114,24 +144,42 @@ class CardAdapter(var context: Context, products: MutableList<Data>, var viewMod
                 if(isEnabled) {
                     holder.viewCardsBinding.switch1.text = "Ενεργοποημένο"
                     holder.viewCardsBinding.switch1.isChecked = true
+                    products_list[holder.adapterPosition].status = 1
                 }else {
                     holder.viewCardsBinding.switch1.text = "Απενεργοποιημένο"
                     holder.viewCardsBinding.switch1.isChecked = false
+                    products_list[holder.adapterPosition].status = 0
                 }
             }
 
-            holder.viewCardsBinding.manuallyText.setSafeOnClickListener {
-                itemHandler?.onRefresh(holder.adapterPosition,products_list[position].id,holder.viewCardsBinding.quantityEdittext.text.toString(), holder.viewCardsBinding.priceEdittext.text.toString(),isEnabled1)
-            }
+
 
             holder.viewCardsBinding.submitBtn.setSafeOnClickListener {
-                itemHandler?.onSubmit(holder.adapterPosition,products_list[position].id,holder.viewCardsBinding.quantityEdittext.text.toString(), holder.viewCardsBinding.priceEdittext.text.toString(),isEnabled1)
+                itemHandler?.onSubmit(holder.adapterPosition, products_list[position].id, holder.viewCardsBinding.quantityEdittext.text.toString(), holder.viewCardsBinding.priceEdittext.text.toString(), isEnabled1)
             }
 
             holder.viewCardsBinding.deleteCard.setSafeOnClickListener {
                 if(position >=0 && holder.adapterPosition < itemCount)
-                    itemHandler?.onDelete(products_list[ holder.adapterPosition ].id)
+                    itemHandler?.onDelete(products_list[holder.adapterPosition].id)
             }
+        }
+        private inner class CustomEditTextListener(var holder: ItemViewHolder,var inputField: String) : TextWatcher {
+
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
+
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {
+                if(inputField == "price")
+                   products_list[holder.adapterPosition].price = charSequence.toString()
+                else
+                   products_list[holder.adapterPosition].quantity = charSequence.toString()
+
+                coroutineScope.launch(Dispatchers.Default) {
+                    itemHandler?.onRefresh(holder.adapterPosition, products_list[holder.adapterPosition].id, holder.viewCardsBinding.quantityEdittext.text.toString(), holder.viewCardsBinding.priceEdittext.text.toString(), isEnabled1)
+                 }
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+
         }
     }
 
@@ -145,7 +193,7 @@ class CardAdapter(var context: Context, products: MutableList<Data>, var viewMod
         diffResult.dispatchUpdatesTo(this)
     }
 
-    fun swap(products: List<Data>) {
+    fun submitList(products: List<Data>) {
         val diffCallback = UserDiffCallback(this.products_list, products)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
@@ -154,72 +202,13 @@ class CardAdapter(var context: Context, products: MutableList<Data>, var viewMod
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun updateList(products: List<Data>) {
 
+        this.products_list.clear()
+        this.products_list.addAll(products)
+        notifyDataSetChanged()
 
-//    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//
-//        private val title: TextView = itemView.findViewById(R.id.title)
-//        private val priceEdittext: EditText = itemView.findViewById(R.id.priceEdittext)
-//        private val quantityEdittext: EditText = itemView.findViewById(R.id.quantityEdittext)
-//        private val quantity_plus: ImageView = itemView.findViewById(R.id.quantity_plus)
-//        private val quantity_minus: ImageView = itemView.findViewById(R.id.quantity_minus)
-//        private val delete_card: TextView = itemView.findViewById(R.id.delete_card)
-//
-//
-//        fun bind(context: Context, product: Data, itemListener: ((Int, Data) -> Unit)?) {
-//
-////            priceEdittext?.setRawInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
-////            priceEdittext?.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-//            // priceEdittext?.filters = arrayOf<InputFilter>(WalletAmountInputFilter(0.00, 15000.00))
-//            // priceEdittext?.setTextColor(resources.getColor(R.color.transparent, null))
-//
-//
-//            priceEdittext.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//                // val _spannable = SpannableStringBuilder("${s.toString()}€")
-//                // priceEdittext.text = _spannable
-//
-//
-//               }
-//
-//
-//                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                }
-//
-//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//
-//                }
-//            })
-//
-//
-//
-//            itemListener?.invoke(adapterPosition, product)
-//
-//            if (adapterPosition == 0) {
-//                if (CardsFragment.firstObject) {
-//                    delete_card.alpha = 1f
-//                    CardsFragment.firstObject = false
-//                } else {
-//                    delete_card.alpha = 0.5f
-//                }
-//            }
-//
-//
-//
-//            priceEdittext.setText("${product.price}")
-//            quantityEdittext.setText("${product.quantity}")
-//            quantity_plus.setOnClickListener {
-//                quantityEdittext.setText("${quantityEdittext.text.toString().toInt().plus(1)}")
-//                quantityEdittext.setSelection(quantityEdittext.text.length)
-//            }
-//            quantity_minus.setOnClickListener {
-//                quantityEdittext.setText("${quantityEdittext.text.toString().toInt().minus(1)}")
-//                quantityEdittext.setSelection(quantityEdittext.text.length)
-//            }
-//        }
-//
-//
-//    }
+    }
 
 }
 

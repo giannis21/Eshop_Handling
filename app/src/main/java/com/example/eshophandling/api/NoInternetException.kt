@@ -1,7 +1,10 @@
 package com.example.eshophandling.api
 
 import java.io.IOException
-import java.lang.Exception
 
 class NoInternetException(message: String) : IOException(message)
 class ApiException(message: String) : Exception(message)
+class NoInternetExceptio1n : IOException() {
+    override val message: String
+        get() = "No network available, please check your WiFi or Data connection"
+}

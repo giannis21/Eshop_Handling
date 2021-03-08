@@ -34,19 +34,6 @@
 
             android:layout_height="wrap_content">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/manuallyText"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-
-                android:backgroundTint="@color/CoolGray"
-                android:fontFamily="@font/akkuratllgrk_black"
-                android:text="σώσε"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <ProgressBar
                 android:layout_width="wrap_content"
@@ -59,12 +46,14 @@
 
             <ImageView
                 android:id="@+id/product"
-                android:layout_width="182dp"
-                android:layout_height="141dp"
+                android:layout_width="191dp"
+                android:layout_height="138dp"
                 android:layout_margin="3dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/logo"
                 app:imageUrl="@{productObj.image}"
-                app:layout_constraintStart_toEndOf="@+id/manuallyText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -72,7 +61,7 @@
                 android:id="@+id/quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="56dp"
+                android:layout_marginTop="36dp"
                 android:text="Ποσότητα"
                 app:layout_constraintEnd_toEndOf="@+id/quantityEdittext"
                 app:layout_constraintStart_toStartOf="@+id/quantityEdittext"

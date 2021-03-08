@@ -17,4 +17,6 @@
     <color name="CoolGray">#EDEDED</color>
     <color name="logo_color">#01233F</color>
     <color name="success_color">#3DB49E</color>
+    <color name="LightRed">#ED6565</color>
+    <color name="CoolGray1">#DAD7D7</color>
 </resources>

@@ -4,17 +4,17 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.os.Handler
+import android.os.Looper
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.alertlocation_kotlin.utils.Preferences
 import com.example.eshophandling.api.ApiClient
@@ -32,7 +32,10 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
+import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.scanner_fragment.*
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import java.util.*
 
 
@@ -79,7 +82,10 @@ class ScannerFragment : Fragment() {
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(MainActivity.screenInches<=5.0)
+           activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
+        com.example.alertlocation_kotlin.utils.Preferences.sharedPref = context?.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         barcodeView = view.findViewById(R.id.barcode_scanner)
         val formats: Collection<BarcodeFormat> = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39)
         barcodeView!!.barcodeView.decoderFactory = DefaultDecoderFactory(formats)
@@ -90,11 +96,42 @@ class ScannerFragment : Fragment() {
         val networkConnectionIncterceptor = this.let { NetworkConnectionIncterceptor(requireContext()) }
         val apiClient = ApiClient(networkConnectionIncterceptor)
         val apiClientBasic = ApiClientBasicAuth(networkConnectionIncterceptor)
-        val repository = RemoteRepository(apiClient,apiClientBasic)
+        val repository = RemoteRepository(apiClient, apiClientBasic)
 
         viewModelFactory = ViewmodelFactory(repository, requireContext())
-        viewModel = ViewModelProvider(requireActivity(),viewModelFactory).get(SharedViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel::class.java)
 
+        if(MainActivity.screenInches<=5.0)
+        KeyboardVisibilityEvent.setEventListener(((activity as? FragmentActivity)!!),
+                object : KeyboardVisibilityEventListener {
+                   override fun onVisibilityChanged(isOpen: Boolean) {
+                        if(isOpen)
+                            MainActivity.hideKeyboardListener?.invoke(true)
+                        else
+                            MainActivity.hideKeyboardListener?.invoke(false)
+
+                        }
+                })
+
+//        scrollview.getViewTreeObserver().addOnGlobalLayoutListener(ViewTreeObserver.OnGlobalLayoutListener {
+//            val heightDiff: Int = scrollview.getRootView().getHeight() - scrollview.getHeight()
+//            println("height difference= ${scrollview.getRootView().getHeight()} -- ${scrollview.getHeight()}")
+//            if(keyboardOpened){
+//                MainActivity.hideKeyboardListener?.invoke(true)
+//
+//
+//
+//
+//            }else{
+//                MainActivity.hideKeyboardListener?.invoke(false)
+//            }
+
+//            if (heightDiff > 100) { // Value should be less than keyboard's height
+//                Log.e("MyActivity", "keyboard opened")
+//            } else {
+//                Log.e("MyActivity", "keyboard closed")
+//            }
+        //})
 
         val diff: Long = Calendar.getInstance().timeInMillis - getDateInMilli(Preferences.lastLoginDate!!)
         val seconds = diff / 1000
@@ -102,9 +139,7 @@ class ScannerFragment : Fragment() {
         val hours = minutes / 60
         val days = hours / 24
 
-        if(days  < 20){
-            activity?.finish()
-        }
+        Toast.makeText(requireContext(), "token alive in day--- $days", Toast.LENGTH_SHORT).show()
 
         manuallyText.setSafeOnClickListener {
             requireContext().showKeyboard(barcodeEdittext?.editText!!)
@@ -140,16 +175,16 @@ class ScannerFragment : Fragment() {
 
         var flashOpened=false
        // flash_light.setColorFilter(Color.argb(0, 0, 0, 0))
-        flash_light.setSafeOnClickListener {
+        flash_light.setOnClickListener {
             if(!flashOpened){
                 flashOpened=true
                 barcodeView!!.setTorchOn()
-                flash_light.setImageDrawable(resources.getDrawable(R.drawable.turn_on_flash,null))
+                flash_light.setImageResource(R.drawable.turn_on_flash)
                 flash_light.background = ContextCompat.getDrawable(requireContext(), R.drawable.bt_ui)
             }else{
                 flashOpened=false
                 barcodeView!!.setTorchOff()
-                flash_light.setImageDrawable(resources.getDrawable(R.drawable.turn_off_flash,null))
+                flash_light.setImageResource(R.drawable.turn_off_flash)
                 flash_light.background = ContextCompat.getDrawable(requireContext(), R.drawable.bt_ui)
             }
 
@@ -157,7 +192,8 @@ class ScannerFragment : Fragment() {
         exit_scan.setSafeOnClickListener {
             cameraScanner.visibility=View.GONE
             flash_light.visibility=View.GONE
-            flash_light.setColorFilter(Color.argb(0, 0, 0, 0))
+            flash_light.setImageResource(R.drawable.turn_off_flash)
+            flash_light.background = ContextCompat.getDrawable(requireContext(), R.drawable.bt_ui)
             barcodeView!!.pause()
         }
 
@@ -166,22 +202,22 @@ class ScannerFragment : Fragment() {
         }
 
         viewModel.productRetrieved.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if(it){
-                (activity as MainActivity?)?.showBanner("Το προιόν προστέθηκε επιτυχώς στην λίστα!",true)
+            if (it) {
+                (activity as MainActivity?)?.showBanner("Το προιόν προστέθηκε επιτυχώς στην λίστα!", true)
             }
         })
 
         viewModel.productExists.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if(it){
+            if (it) {
                 (activity as MainActivity?)?.showBanner("Το προιόν υπάρχει ήδη στην λίστα!")
             }
         })
 
         viewModel.noInternetException.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it)
-                (activity as MainActivity?)?.showBanner("Δεν υπάρχει σύνδεση στο internet!")
+                (activity as MainActivity?)?.showBanner("Ουπς, κάτι πήγε λάθος! Πιθανόν πρόβλημα σύνδεσης.")
         })
-        viewModel.error?.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.error.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it)
                 (activity as MainActivity?)?.showBanner("Ουπς, κάτι πήγε λάθος!")
         })
@@ -199,7 +235,7 @@ class ScannerFragment : Fragment() {
         super.onDestroyView()
         viewModel.productRetrieved.postValue(false)
         viewModel.noInternetException.postValue(false)
-        viewModel.error?.postValue(false)
+        viewModel.error.postValue(false)
         viewModel.productExists.postValue(false)
         viewModel.productNotFound.postValue(false)
     }
