@@ -91,21 +91,55 @@
                          app:layout_constraintStart_toStartOf="parent"
                          app:layout_constraintTop_toTopOf="parent" />
 
-                     <TextView
-                         android:id="@+id/quantity"
-                         android:layout_width="0dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginHorizontal="7dp"
-                         android:layout_marginTop="3dp"
-                         android:background="@color/CoolGray"
-                         android:gravity="center"
-                         android:text="@{String.valueOf(product.quantity)}"
-                         android:textColor="@color/logo_color"
-                         android:textSize="16sp"
-                         android:textStyle="bold"
+                     <LinearLayout
+                         android:id="@+id/quantity_container"
+                         android:layout_width="wrap_content"
+                         android:layout_height="20dp"
+                         android:layout_marginTop="5dp"
+                         android:orientation="horizontal"
                          app:layout_constraintEnd_toEndOf="@+id/quantity_txt"
                          app:layout_constraintStart_toStartOf="@+id/quantity_txt"
-                         app:layout_constraintTop_toBottomOf="@+id/quantity_txt" />
+                         app:layout_constraintTop_toBottomOf="@+id/quantity_txt"
+                         app:tint="@color/CoolGray1">
+
+                         <ImageView
+                             android:id="@+id/minus_button"
+                             android:layout_width="wrap_content"
+                             android:layout_height="match_parent"
+                             android:layout_weight="1"
+                             android:background="@drawable/rebranding_rounded_left"
+                             android:padding="4dp"
+                             android:src="@drawable/ic_baseline_remove"
+                             app:layout_constraintBottom_toBottomOf="parent"
+                             app:layout_constraintStart_toStartOf="parent"
+                             app:layout_constraintTop_toTopOf="parent"
+                             app:tint="@color/black" />
+
+                         <TextView
+                             android:id="@+id/ammount_text"
+                             style="@style/caption_bold"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_weight="1"
+                             tools:text="13"
+                             android:translationY="-1dp"
+                             android:background="@color/zxing_transparent"
+                             android:gravity="center"
+                             android:layout_marginHorizontal="8dp"
+                             android:text="@{product.quantity_minus == null ? `1` : product.quantity_minus}"
+                             android:textColor="@color/black"
+                             android:textSize="16sp" />
+
+                         <ImageView
+                             android:id="@+id/plus_button"
+                             android:layout_width="wrap_content"
+                             android:layout_height="match_parent"
+                             android:layout_weight="1"
+                             android:background="@drawable/rebranding_rounded_right"
+                             android:padding="4dp"
+                             android:src="@drawable/ic_baseline_add_24"
+                             app:tint="@color/black" />
+                     </LinearLayout>
 
                      <TextView
                          android:id="@+id/price_txt"
@@ -142,59 +176,6 @@
 
              </com.google.android.material.card.MaterialCardView>
          </RelativeLayout>
-
-         <LinearLayout
-             android:id="@+id/quantity_container"
-             android:layout_width="wrap_content"
-             android:layout_height="25dp"
-             android:translationY="-6dp"
-             android:orientation="horizontal"
-             app:layout_constraintBottom_toBottomOf="parent"
-             app:layout_constraintEnd_toEndOf="parent"
-             app:tint="@color/CoolGray1">
-
-             <ImageView
-                 android:id="@+id/minus_button"
-                 android:layout_width="wrap_content"
-                 android:layout_height="match_parent"
-                 android:layout_weight="1"
-                 android:padding="5dp"
-                 android:background="@drawable/rebranding_rounded_left"
-                 android:src="@drawable/ic_baseline_remove"
-                 app:layout_constraintBottom_toBottomOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintTop_toTopOf="parent"
-                 app:tint="@color/black" />
-
-             <TextView
-                 android:id="@+id/ammount_text"
-                 android:layout_width="wrap_content"
-                 android:layout_height="25dp"
-                 android:layout_weight="1"
-                 style="@style/caption_bold"
-                 android:background="@color/zxing_transparent"
-                 android:gravity="center|center_vertical|center_horizontal"
-                 android:paddingHorizontal="8dp"
-                 android:text="@{product.quantity_minus == null ? `1` : product.quantity_minus}"
-                 android:textColor="@color/black"
-                 android:textSize="16sp" />
-
-             <ImageView
-                 android:id="@+id/plus_button"
-                 android:layout_width="wrap_content"
-                 android:layout_height="match_parent"
-                 android:layout_weight="1"
-                 android:background="@drawable/rebranding_rounded_right"
-                 android:padding="5dp"
-                 android:src="@drawable/ic_baseline_add_24"
-                 app:tint="@color/black" />
-         </LinearLayout>
-
-
-
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

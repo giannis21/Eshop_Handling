@@ -43,7 +43,7 @@ interface ApiClient {
     suspend fun submitProduct(@Path("id") id: String, @Body product: SubmittedProduct): Response<SubmittedProductResponse>
 
     @Headers("Content-Type: application/x-www-form-urlencoded")
-    @PUT("api/rest_admin/products/")
+    @PUT("api/rest_admin/allproducts/")
     suspend fun submitProducts(@Body products: SubmittedProducts): Response<ResponseBody>
 
     companion object {

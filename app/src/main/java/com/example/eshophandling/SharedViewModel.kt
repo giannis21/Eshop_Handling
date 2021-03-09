@@ -1,12 +1,11 @@
 package com.example.eshophandling
 
 import android.content.Context
-import androidx.core.os.trace
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alertlocation_kotlin.utils.Preferences.username
-import com.example.eshophandling.api.NoInternetException
 import com.example.eshophandling.api.RemoteRepository
 import com.example.eshophandling.ui.Loading_dialog
 import com.example.eshophandling.ui.cards.product_response.Data
@@ -158,7 +157,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
         println("carddss $CardsShown")
         viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
-                remoteRepository.submitProducts(SubmittedProducts(getSubmittedProducts(CardsShown),username!!, milliToDate(Calendar.getInstance().timeInMillis.toString())))
+                remoteRepository.submitProducts(SubmittedProducts(getSubmittedProducts(CardsShown),username!!, milliToDate(Calendar.getInstance().timeInMillis.toString()),"${Build.MANUFACTURER} ${Build.MODEL}"))
             }.onFailure {
 
                 error.value= true
@@ -184,7 +183,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
 
         if(CardsShown){
             allProducts.value!!.forEach {
-                list_to_be_saved.add(Data1(it.id,it.price,it.quantity,null,it.sku,it.status))
+                list_to_be_saved.add(Data1(it.id,it.price.toFloat(),it.quantity,null,it.sku,it.status))
             }
 
         }else{
@@ -194,7 +193,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
 
                 val saved_quantity=initial_quantity_value?.toInt()!! -  data.quantity_minus?.toInt()!!
 
-                list_to_be_saved.add(Data1(data.id,data.price,saved_quantity.toString(),saved_quantity.toString(),data.sku,data.status))
+                list_to_be_saved.add(Data1(data.id,data.price.toFloat(),saved_quantity.toString(),saved_quantity.toString(),data.sku,data.status))
             }
 
         }

@@ -97,7 +97,6 @@ class CardsFragment : Fragment(),ItemHandler {
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel::class.java)
 
 
-
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         recyclerview!!.layoutManager = layoutManager
 
@@ -106,14 +105,14 @@ class CardsFragment : Fragment(),ItemHandler {
 
         val dataArticles = ArrayList<Data>()
         var a=2.toString()
-        var product=Data(1, "1", "2", "30",null, a, 1)
-        var product1=Data(2, "1", "1", "30", null,a, 1)
-        var product2=Data(3, "1", "1", "30", null,a, 1)
-        var product3=Data(4, "1", "1", "30", null,a, 1)
-        var product4=Data(5, "1", "1", "43", null,a, 0)
-        var product5=Data(11, "1", "1", "30", null,a, 0)
-        var product6=Data(122, "1", "1", "45", null,a, 0)
-        var product7=Data(32, "1", "1", "40", null,a, 0)
+        var product=Data(1, "1", "2", "30", null, a, 1)
+        var product1=Data(2, "1", "1", "30", null, a, 1)
+        var product2=Data(3, "1", "1", "30", null, a, 1)
+        var product3=Data(4, "1", "1", "30", null, a, 1)
+        var product4=Data(5, "1", "1", "43", null, a, 0)
+        var product5=Data(11, "1", "1", "30", null, a, 0)
+        var product6=Data(122, "1", "1", "45", null, a, 0)
+        var product7=Data(32, "1", "1", "40", null, a, 0)
 
         dataArticles.add(product)
         dataArticles.add(product1)
@@ -130,7 +129,8 @@ class CardsFragment : Fragment(),ItemHandler {
         mAdapter!!.itemHandler=this
         recyclerview!!.adapter = mAdapter
 
-        mAdapterVertical = CardAdapter(requireContext(), viewModel.allProducts.value ?: mutableListOf(), defaultScope, true)
+        mAdapterVertical = CardAdapter(requireContext(), viewModel.allProducts.value
+                ?: mutableListOf(), defaultScope, true)
         verticalrecyclerview!!.adapter = mAdapterVertical
         mAdapterVertical!!.itemHandler=this
         initSwipe()
@@ -196,22 +196,22 @@ class CardsFragment : Fragment(),ItemHandler {
         viewModel.allProducts.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it.isEmpty())
                 positionstxt.visibility = View.GONE
-            else{
-                if(recyclerview!!.isVisible)
+            else {
+                if (recyclerview!!.isVisible)
                     positionstxt.visibility = View.VISIBLE
             }
             viewModel.allProducts.value?.forEachIndexed { index, data ->
-                println("data"+data.quantity_minus)
+                println("data" + data.quantity_minus)
             }
-            if(it.size>=2)
+            if (it.size >= 2)
                 show_bottomsheet.visibility = View.VISIBLE
             else
                 show_bottomsheet.visibility = View.GONE
 
-            if(it.size>=1){
-                show_list.visibility=View.VISIBLE
-            }else
-                show_list.visibility=View.GONE
+            if (it.size >= 1) {
+                show_list.visibility = View.VISIBLE
+            } else
+                show_list.visibility = View.GONE
 
             if (it.isEmpty()) {
                 mAdapter?.clear()
@@ -260,10 +260,9 @@ class CardsFragment : Fragment(),ItemHandler {
         dialog.findViewById<TextView>(R.id.submit_all_btn)?.setSafeOnClickListener {
             showconfirmDialog(msg = "Υποβολή όλων των προϊόντων;"){
                 if(it){
-                    (activity as MainActivity?)?.showBanner("περιμενω να στειλεις το API!!!!!!!!!!!!")
-                  //  viewModel.submitAllProducts(showCards){
-                  //      (activity as MainActivity?)?.showBanner("Το προϊόντα υποβλήθηκαν επιτυχώς!", true)
-                  //  }
+                    viewModel.submitAllProducts(showCards){
+                        (activity as MainActivity?)?.showBanner("Το προϊόντα υποβλήθηκαν επιτυχώς!", true)
+                    }
 
                 }
                 dialog.dismiss()
@@ -292,7 +291,7 @@ class CardsFragment : Fragment(),ItemHandler {
     override fun onSubmit(position: Int, id: Int, quantity: String, price: String, isEnabled1: Boolean)  {
         val product= viewModel.allProducts.value?.find { it.id == id }
 
-        val prod_to_be_submitted=SubmittedProduct(product?.id!!, price.toInt(), quantity.toInt(), product.sku, if (isEnabled1) 1 else 0, "user1", "date")
+        val prod_to_be_submitted=SubmittedProduct(product?.id!!, price.toFloat(), quantity.toInt(), product.sku, if (isEnabled1) 1 else 0, "user1", "date")
         viewModel.submitProduct(prod_to_be_submitted)
     }
 
@@ -326,11 +325,11 @@ class CardsFragment : Fragment(),ItemHandler {
         }
         mAdapterVertical?.submitList(viewModel.allProducts.value!!)
         viewModel.allProducts.value?.forEachIndexed { index, data ->
-            println("data"+data.quantity_minus)
+            println("data" + data.quantity_minus)
         }
     }
 
-    fun showconfirmDialog(msg:String,callback:((Boolean) -> Unit)){
+    fun showconfirmDialog(msg: String, callback: ((Boolean) -> Unit)){
         val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setMessage(msg)
         alertDialogBuilder.setCancelable(true)
