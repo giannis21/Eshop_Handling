@@ -39,7 +39,7 @@ fun getDateInMilli(date: String): Long {
     }
 }
 
- fun milliToDate(milliseconds: String): String{
+ fun milliToDate(milliseconds: String,otherFormat:Boolean?=false): String{
      // Create a DateFormatter object for displaying date in specified format.
 
      // Create a DateFormatter object for displaying date in specified format.

@@ -16,6 +16,7 @@ import com.example.eshophandling.utils.milliToDate
 import kotlinx.coroutines.*
 import java.io.IOException
 import java.util.*
+import kotlin.jvm.Throws
 
 class SharedViewModel(var remoteRepository: RemoteRepository, var context: Context) : ViewModel() {
 

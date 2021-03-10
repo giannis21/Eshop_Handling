@@ -227,8 +227,11 @@ class CardsFragment : Fragment(),ItemHandler {
 
 
         viewModel.noInternetException.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (it)
+            if (it){
                 (activity as MainActivity?)?.showBanner("Δεν υπάρχει σύνδεση στο internet!")
+                viewModel.noInternetException.postValue(false)
+            }
+
         })
         viewModel.error.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it)
