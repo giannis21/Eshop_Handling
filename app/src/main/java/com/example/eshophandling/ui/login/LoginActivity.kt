@@ -79,7 +79,7 @@ import java.util.*
             }
 
             window.decorView.rootView.hideKeyboard()
-            viewModel.getCredentials(username_container.editText?.text.toString().trim(),password_container.editText?.text.toString().trim(),url_container.editText?.text.toString().trim())
+            viewModel.getCredentials(username_container.editText?.text.toString().trim(),password_container.editText?.text.toString().trim(),getAbsoluteUrl(url_container.editText?.text.toString().trim()))
         }
 
         addFocusListeners()
@@ -130,13 +130,33 @@ import java.util.*
                  }
              }
          }
-     }
 
+         textViewHttp.setOnClickListener {
+             if(textViewHttp.text.toString() == "https://"){
+                 textViewHttp.text ="http://"
+             }else{
+                 textViewHttp.text ="https://"
+             }
+         }
+     }
+     fun getAbsoluteUrl(baseUrl: String) : String {
+
+         var temp=baseUrl.removeSuffix("/")
+         if(temp.contains("https")!!){
+             temp=temp.removePrefix("https://")
+         }else if(temp.contains("http")){
+             temp=temp.removePrefix("http://")
+         }
+         temp=textViewHttp.text.toString()+temp+"/"
+
+         BaseUrl = temp
+         return temp +"api/rest_admin/oauth2/token/client_credentials"
+     }
      private fun observeViewModel() {
          viewModel.LoggedIn.observe(this, Observer {
              if(it){
                  lastLoginDate = milliToDate(Calendar.getInstance().timeInMillis.toString())
-                 BaseUrl = viewModel.validUrl.value
+
                  startActivity(Intent(this, MainActivity::class.java))
              }
          })
@@ -159,6 +179,11 @@ import java.util.*
          viewModel.error?.observe(this, Observer {
              showBanner("Ουπς, κάτι πήγε λάθος!")
          })
+         viewModel.unknownHostException.observe(this, Observer {
+             if(it)
+             showBanner("Ουπς, κάτι πήγε λάθος με το url!")
+         })
+
      }
 
      private val loginTextWatcher: TextWatcher = object : TextWatcher {

@@ -13,12 +13,12 @@ import retrofit2.Response
 
 class RemoteRepository(private val my_Api: ApiClient,var apiClientBasic: ApiClientBasicAuth) {
 
-    suspend fun login(loginUser: LoginUser): Response<LoginUser> {
-        return my_Api.login(loginUser)
+    suspend fun login(loginUser: LoginUser,url:String): Response<LoginUser> {
+        return my_Api.login(loginUser,url)
     }
 
-    suspend fun getCredentials(authToken: String): Response<CredentialsResponse> {
-        return apiClientBasic.getCredentials(authToken)
+    suspend fun getCredentials(authToken: String,url:String): Response<CredentialsResponse> {
+        return apiClientBasic.getCredentials(authToken,url)
     }
 
     suspend fun getProduct(barcode: String): Response<Product> {

@@ -15,7 +15,7 @@ object Preferences {
 
     var BaseUrl: String?
         get() {
-            return sharedPref?.getString("baseurl", "")
+            return sharedPref?.getString("baseurl", "https://www.status-spar1ta.gr/")
         }
         set(value) {
             sharedPref?.edit()?.putString("baseurl", value)?.apply()

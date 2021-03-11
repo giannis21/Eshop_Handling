@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.UnsupportedEncodingException
+import java.net.UnknownHostException
 
 
 class LoginViewModel(var remoteRepository: RemoteRepository, var context: Context) : ViewModel() {
@@ -28,6 +29,7 @@ class LoginViewModel(var remoteRepository: RemoteRepository, var context: Contex
     var noInternetException = MutableLiveData<Boolean>(false)
     var error :MutableLiveData<Boolean> ?=null
     var job:Job=Job()
+    var unknownHostException=MutableLiveData<Boolean>()
     val exceptionHandler = CoroutineExceptionHandler { _, e ->
 
         noInternetException.postValue(true)
@@ -37,14 +39,16 @@ class LoginViewModel(var remoteRepository: RemoteRepository, var context: Contex
         Preferences.sharedPref = context.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         loading.postValue(true)
 
-        viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
+        viewModelScope.launch(exceptionHandler + Dispatchers.Default) {
             runCatching {
                 useBearer = false
-                remoteRepository.getCredentials(getAuthToken())
+                remoteRepository.getCredentials(getAuthToken(),url)
             }.onFailure {
 
                 if(it is NoInternetException){
                     noInternetException.postValue(true)
+                }else if( it is UnknownHostException){
+                    unknownHostException.postValue(true)
                 }
                 loading.postValue(false)
 
@@ -67,11 +71,12 @@ class LoginViewModel(var remoteRepository: RemoteRepository, var context: Contex
     }
 
 
-    fun login(username: String ="admin", password: String  ="admin") {
+    fun login(username: String ="admin", password: String  ="qwe123!") {
         useBearer = true
         viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
-                remoteRepository.login(LoginUser("admin", "qwe123!"))
+                var url = Preferences.BaseUrl+"api/rest_admin/login"
+                remoteRepository.login(LoginUser(username, password),url)
             }.onFailure {
                 if(it is NoInternetException){
                     noInternetException.postValue(true)

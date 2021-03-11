@@ -190,11 +190,11 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
         }else{
             allProducts.value!!.forEachIndexed { index, data ->
                 val initial_quantity_value= allProducts_initial.value?.get(index)?.quantity
-                val new_value= allProducts.value?.get(index)?.quantity
+                var substractedValue= if (data.quantity_minus == null ) "1" else data.quantity_minus
 
-                val saved_quantity=initial_quantity_value?.toInt()!! -  data.quantity_minus?.toInt()!!
+                val saved_quantity=initial_quantity_value?.toInt()!! - substractedValue?.toInt()!!
 
-                list_to_be_saved.add(Data1(data.id,data.price.toFloat(),saved_quantity.toString(),saved_quantity.toString(),data.sku,data.status))
+                list_to_be_saved.add(Data1(data.id,data.price.toFloat(),data.quantity,saved_quantity.toString(),data.sku,data.status))
             }
 
         }

@@ -1,5 +1,6 @@
 package com.example.eshophandling.api
 
+ import com.example.alertlocation_kotlin.utils.Preferences
  import com.example.alertlocation_kotlin.utils.Preferences.token
  import com.example.eshophandling.MainActivity.Companion.errorListener
  import com.example.eshophandling.ui.cards.product_response.Product
@@ -23,8 +24,8 @@ interface ApiClient {
 
 
     @Headers("Content-Type: application/json")
-    @POST("api/rest_admin/login")
-    suspend fun login(@Body loginUser: LoginUser): Response<LoginUser>
+    @POST()
+    suspend fun login(@Body loginUser: LoginUser,@Url url:String): Response<LoginUser>
 
     @Headers("Content-Type: application/json")
     @POST("api/rest_admin/logout")
@@ -77,7 +78,7 @@ interface ApiClient {
                         .addInterceptor(logging)
                         .addInterceptor(interceptor)
             return Retrofit.Builder().client(okHttpClient1.build())
-                    .baseUrl("https://www.status-sparta.gr/")
+                    .baseUrl(Preferences.BaseUrl!!)//"https://www.status-sparta.gr/"
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                     .create(ApiClient::class.java)

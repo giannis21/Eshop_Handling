@@ -113,25 +113,6 @@ class ScannerFragment : Fragment() {
                         }
                 })
 
-//        scrollview.getViewTreeObserver().addOnGlobalLayoutListener(ViewTreeObserver.OnGlobalLayoutListener {
-//            val heightDiff: Int = scrollview.getRootView().getHeight() - scrollview.getHeight()
-//            println("height difference= ${scrollview.getRootView().getHeight()} -- ${scrollview.getHeight()}")
-//            if(keyboardOpened){
-//                MainActivity.hideKeyboardListener?.invoke(true)
-//
-//
-//
-//
-//            }else{
-//                MainActivity.hideKeyboardListener?.invoke(false)
-//            }
-
-//            if (heightDiff > 100) { // Value should be less than keyboard's height
-//                Log.e("MyActivity", "keyboard opened")
-//            } else {
-//                Log.e("MyActivity", "keyboard closed")
-//            }
-        //})
 
         val diff: Long = Calendar.getInstance().timeInMillis - getDateInMilli(Preferences.lastLoginDate!!)
         val seconds = diff / 1000
@@ -139,7 +120,6 @@ class ScannerFragment : Fragment() {
         val hours = minutes / 60
         val days = hours / 24
 
-        Toast.makeText(requireContext(), "token alive in day--- $days", Toast.LENGTH_SHORT).show()
 
         manuallyText.setSafeOnClickListener {
             requireContext().showKeyboard(barcodeEdittext?.editText!!)
@@ -198,7 +178,12 @@ class ScannerFragment : Fragment() {
         }
 
         add_product.setSafeOnClickListener {
-             viewModel.getProduct(lastText)
+             lastText?.let {
+                 viewModel.getProduct(lastText)
+             } ?:kotlin.run {
+                 (activity as MainActivity?)?.showBanner("Σκανάρετε πρώτα κάποιο προϊόν!")
+             }
+
         }
 
         viewModel.productRetrieved.observe(viewLifecycleOwner, androidx.lifecycle.Observer {

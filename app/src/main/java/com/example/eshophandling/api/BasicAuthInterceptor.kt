@@ -7,6 +7,7 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 import java.io.UnsupportedEncodingException
+import kotlin.jvm.Throws
 
 class BasicAuthInterceptor(user: String?, password: String?) : Interceptor {
     private val credentials: String
@@ -22,13 +23,4 @@ class BasicAuthInterceptor(user: String?, password: String?) : Interceptor {
         credentials = Credentials.basic(user!!, password!!)
     }
 
-    fun getAuthToken( username:String ="demo",  password: String ="demo"): String {
-        var data = ByteArray(0)
-        try {
-            data = ("$username:$password").toByteArray(charset("UTF-8"))
-        } catch (e: UnsupportedEncodingException) {
-            e.printStackTrace()
-        }
-        return "Basic " + Base64.encodeToString(data, Base64.NO_WRAP)
-    }
 }
