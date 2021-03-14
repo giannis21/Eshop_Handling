@@ -39,15 +39,16 @@ fun getDateInMilli(date: String): Long {
     }
 }
 
- fun milliToDate(milliseconds: String,otherFormat:Boolean?=false): String{
-     // Create a DateFormatter object for displaying date in specified format.
+ @SuppressLint("SimpleDateFormat")
+ fun milliToDate(milliseconds: String, otherFormat:Boolean?=false): String{
 
-     // Create a DateFormatter object for displaying date in specified format.
-     val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+     val formatter:SimpleDateFormat
 
-     // Create a calendar object that will convert the date and time value in milliseconds to date.
+     formatter = if(!otherFormat!!)
+         SimpleDateFormat("yyyy-MM-dd HH:mm")
+     else
+         SimpleDateFormat("yyyy-MM-dd")
 
-     // Create a calendar object that will convert the date and time value in milliseconds to date.
      val calendar = Calendar.getInstance()
      calendar.timeInMillis = milliseconds.toLong()
      return formatter.format(calendar.time)

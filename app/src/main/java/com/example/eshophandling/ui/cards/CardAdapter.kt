@@ -10,29 +10,25 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eshophandling.R
-import com.example.eshophandling.SharedViewModel
 import com.example.eshophandling.databinding.ViewCardsBinding
 import com.example.eshophandling.databinding.ViewListBinding
-import com.example.eshophandling.ui.cards.product_response.Data
-import com.example.eshophandling.ui.cards.product_response.Product
+import com.example.eshophandling.data.model.product_response.Data
 import com.example.eshophandling.utils.setSafeOnClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 
 class CardAdapter(var context: Context, products: MutableList<Data>, private var coroutineScope: CoroutineScope, var vertical: Boolean = false) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
+    var isScrolling: Boolean=false
     private val products_list = mutableListOf<Data>()
-    var itemListener: ((Int, Product) -> Unit)? = null
     var itemHandler:ItemHandler?=null
     var isEnabled1 = true
 
     init {
         products_list.addAll(products)
-
     }
 
 
@@ -98,7 +94,6 @@ class CardAdapter(var context: Context, products: MutableList<Data>, private var
                     itemHandler?.onRefreshQuantity(holder.adapterPosition,products_list[holder.adapterPosition].id,products_list[holder.adapterPosition].quantity_minus ?: "1")
                 }
 
-
             }
         }
 
@@ -115,6 +110,7 @@ class CardAdapter(var context: Context, products: MutableList<Data>, private var
 
             holder.viewCardsBinding.quantityEdittext.addTextChangedListener(CustomEditTextListener(holder,"quantity"))
             holder.viewCardsBinding.priceEdittext.addTextChangedListener(CustomEditTextListener(holder,"price"))
+
 
             holder.viewCardsBinding.quantityPlus.setOnClickListener {
 
@@ -133,20 +129,20 @@ class CardAdapter(var context: Context, products: MutableList<Data>, private var
 
             if(products_list[position].status == 1 ){
                 holder.viewCardsBinding.switch1.isChecked=true
-                holder.viewCardsBinding.switch1.text = "Ενεργοποημένο"
+                holder.viewCardsBinding.switch1.text = context.getString(R.string.activated)
             }else{
                 holder.viewCardsBinding.switch1.isChecked=false
-                holder.viewCardsBinding.switch1.text = "Απενεργοποιημένο"
+                holder.viewCardsBinding.switch1.text = context.getString(R.string.deactivated)
             }
 
             holder.viewCardsBinding.switch1.setOnCheckedChangeListener { compoundButton, isEnabled ->
                 isEnabled1=isEnabled
                 if(isEnabled) {
-                    holder.viewCardsBinding.switch1.text = "Ενεργοποημένο"
+                    holder.viewCardsBinding.switch1.text = context.getString(R.string.activated)
                     holder.viewCardsBinding.switch1.isChecked = true
                     products_list[holder.adapterPosition].status = 1
                 }else {
-                    holder.viewCardsBinding.switch1.text = "Απενεργοποιημένο"
+                    holder.viewCardsBinding.switch1.text = context.getString(R.string.deactivated)
                     holder.viewCardsBinding.switch1.isChecked = false
                     products_list[holder.adapterPosition].status = 0
                 }
@@ -168,14 +164,24 @@ class CardAdapter(var context: Context, products: MutableList<Data>, private var
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {
-                if(inputField == "price")
-                   products_list[holder.adapterPosition].price = charSequence.toString()
-                else
-                   products_list[holder.adapterPosition].quantity = charSequence.toString()
+                  try {
+                      if (inputField == "price")
+                          products_list[holder.adapterPosition].price = charSequence.toString()
+                      else
+                          products_list[holder.adapterPosition].quantity = charSequence.toString()
+                  }catch (e: Exception){
+                      println("errorrr ${e.message}" )
+                  }
 
-                coroutineScope.launch(Dispatchers.Default) {
-                    itemHandler?.onRefresh(holder.adapterPosition, products_list[holder.adapterPosition].id, holder.viewCardsBinding.quantityEdittext.text.toString(), holder.viewCardsBinding.priceEdittext.text.toString(), isEnabled1)
-                 }
+
+                    synchronized(this){
+                        coroutineScope.launch(Dispatchers.Default) {
+                            try {
+                                itemHandler?.onRefresh(holder.adapterPosition, products_list[holder.adapterPosition].id, holder.viewCardsBinding.quantityEdittext.text.toString(), holder.viewCardsBinding.priceEdittext.text.toString(), isEnabled1)
+                            }catch (e: Exception){}
+                        }
+                    }
+
             }
 
             override fun afterTextChanged(editable: Editable) {}

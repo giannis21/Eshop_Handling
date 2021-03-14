@@ -9,7 +9,7 @@
     android:layout_marginVertical="80dp"
 
     android:background="@drawable/background_with_shadow"
-    tools:context=".ScannerFragment">
+    tools:context=".ui.ScannerFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                 android:backgroundTint="@color/CoolGray"
                 android:fontFamily="@font/akkuratllgrk_black"
                 android:gravity="center"
-                android:text="Ή δώσε το χειροκίνητα"
+                android:text="@string/manually_barcode"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -82,11 +82,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="barcode"
+                    android:hint="@string/barcode"
 
                     android:inputType="textPersonName"
-                    android:maxLength="10"
-                    android:paddingStart="0dp" />
+                    android:paddingStart="0dp"
+                    tools:ignore="RtlSymmetry" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <View
@@ -106,7 +106,7 @@
                 android:layout_marginTop="38dp"
                 android:backgroundTint="@color/logo_color"
                 android:gravity="center"
-                android:text="αναζήτηση"
+                android:text="@string/search"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -138,18 +138,34 @@
                 android:id="@+id/barcode_scanner"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-
                 android:layout_above="@+id/buttonsLayout"
                 android:layout_alignParentTop="true">
 
             </com.journeyapps.barcodescanner.DecoratedBarcodeView>
 
+            <TextView
+                android:id="@+id/custom_barcode_view"
+                android:visibility="invisible"
+
+                android:layout_marginBottom="6dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/constraint"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginHorizontal="20dp"
+
+                android:background="@color/CoolGray"
+                android:gravity="center"
+                android:textColor="@color/logo_color"
+                android:textSize="16sp"
+                android:textStyle="bold" />
             <LinearLayout
                 android:id="@+id/buttonsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/centerHorizont"
+                android:layout_toStartOf="@+id/centerHorizont"
                 android:orientation="vertical">
 
                 <Button
@@ -157,7 +173,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
-                    android:text="Προσθήκη"
+                    android:text="@string/add"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
@@ -167,7 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
-                    android:text="Έξοδος"
+                    android:text="@string/exit"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="15sp" />

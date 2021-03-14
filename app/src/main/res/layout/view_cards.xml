@@ -6,7 +6,7 @@
     <data>
         <variable
             name="productObj"
-            type="com.example.eshophandling.ui.cards.product_response.Data" />
+            type="com.example.eshophandling.data.model.product_response.Data" />
 
 
     </data>
@@ -56,13 +56,26 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/barcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{productObj.sku}"
+                android:textStyle="bold"
+                android:paddingHorizontal="4dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/product"
+                app:layout_constraintStart_toStartOf="@+id/product"
+                app:layout_constraintTop_toBottomOf="@+id/product"
+                tools:text="0093" />
 
             <TextView
                 android:id="@+id/quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
-                android:text="Ποσότητα"
+                android:text="@string/quantity"
                 app:layout_constraintEnd_toEndOf="@+id/quantityEdittext"
                 app:layout_constraintStart_toStartOf="@+id/quantityEdittext"
                 app:layout_constraintTop_toBottomOf="@+id/product" />
@@ -118,7 +131,7 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="16dp"
                 android:gravity="center"
-                android:text="Τιμή"
+                android:text="@string/price"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/quantityEdittext"
                 app:layout_constraintTop_toBottomOf="@+id/quantity_line" />
@@ -149,7 +162,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Κατάσταση"
+                android:text="@string/status"
                 app:layout_constraintEnd_toEndOf="@+id/priceEdittext"
                 app:layout_constraintStart_toStartOf="@+id/priceEdittext"
                 app:layout_constraintTop_toBottomOf="@+id/price_line" />
@@ -191,7 +204,7 @@
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
                 android:paddingVertical="4dp"
-                android:text="υποβολή"
+                android:text="@string/submit"
 
                 android:textAlignment="center"
                 android:textAppearance="@style/button_medium"
@@ -217,7 +230,7 @@
                 android:gravity="center"
                 android:paddingVertical="4dp"
                 android:src="@drawable/ic_delete"
-                android:text="διαγραφή"
+                android:text="@string/delete"
                 android:textAppearance="@style/button_medium"
                 android:textColor="@color/CoolGray"
                 app:layout_constraintBottom_toBottomOf="parent"

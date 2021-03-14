@@ -2,4 +2,22 @@
     <string name="app_name">Eshop Handling</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login">Login</string>
+    <string name="scanner">Scanner</string>
+    <string name="quantity">Ποσότητα</string>
+    <string name="price">Τιμή</string>
+    <string name="status">Κατάσταση</string>
+    <string name="delete">διαγραφή</string>
+    <string name="submit">υποβολή</string>
+    <string name="delete_all_products_dialog_title">Είσαι σίγουρος πως θες να διαγράψεις όλα τα προϊόντα;</string>
+    <string name="proucts_deleted">Το προϊόντα διαγράφηκαν επιτυχώς!</string>
+    <string name="submit_all_products_title_dialog">Υποβολή όλων των προϊόντων;</string>
+    <string name="products_submitted">Το προϊόντα υποβλήθηκαν επιτυχώς!</string>
+    <string name="activated">Ενεργοποημένο</string>
+    <string name="deactivated">Απενεργοποιημένο</string>
+    <string name="add">Προσθήκη</string>
+    <string name="exit">Έξοδος</string>
+    <string name="search">αναζήτηση</string>
+    <string name="barcode">barcode</string>
+    <string name="manually_barcode">Ή δώσε το χειροκίνητα</string>
 </resources>

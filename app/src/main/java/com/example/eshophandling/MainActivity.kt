@@ -9,6 +9,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main2)
         val dm = resources.displayMetrics
 
@@ -69,9 +71,13 @@ class MainActivity : AppCompatActivity() {
         errorListener = { error ->
             when (error) {
                 401 -> {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    showBanner("Ουπς, υπάρχει κάποιο πρόβλημα!")
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }, 5000)
+
                 }
                 500 -> {
                     showBanner("server error!")
@@ -111,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     cLayout.removeView(view)
-                }, 3000)
+                }, 4000)
             }
         }
     }

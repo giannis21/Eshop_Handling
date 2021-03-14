@@ -23,15 +23,7 @@
         android:src="@drawable/ellipse2" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="77dp"
-        android:background="@drawable/toolbar_style">
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tvTitle"
@@ -45,7 +37,7 @@
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/nexabold"
-        android:text="Scanner"
+        android:text="@string/scanner"
         android:textColor="@color/white"
         android:textSize="18sp"
         tools:ignore="RtlSymmetry" />
