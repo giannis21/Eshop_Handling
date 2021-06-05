@@ -79,7 +79,7 @@ class LoginViewModel(var remoteRepository: RemoteRepository, var context: Contex
         useBearer = true
         viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
-                var url = Preferences.BaseUrl+"api/rest_admin/login"
+                val url = Preferences.BaseUrl+"api/rest_admin/login"
                 remoteRepository.login(LoginUser(username, password),url)
             }.onFailure {
                 if(it is NoInternetException){

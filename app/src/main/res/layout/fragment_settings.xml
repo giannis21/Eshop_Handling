@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginHorizontal="40dp"
     android:layout_marginVertical="80dp"
     android:background="@drawable/background_with_shadow"
-    android:layout_height="match_parent"
     tools:context=".ui.ScannerFragment">
 
     <TextView
@@ -27,14 +26,14 @@
 
     <TextView
         android:id="@+id/email"
-        android:paddingStart="10dp"
-        android:background="@color/CoolGray"
         android:layout_width="match_parent"
         android:layout_height="33dp"
-        android:layout_marginTop="3dp"
         android:layout_marginHorizontal="6dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/CoolGray"
         android:gravity="center_vertical"
-        android:text="giannisfragoulis@gmail.com"
+        android:paddingStart="10dp"
+        android:text="adrian.mol@hotmail.com"
         android:textColor="@color/logo_color"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -53,18 +52,18 @@
         android:text="τηλέφωνο"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email"/>
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <TextView
         android:id="@+id/phone"
-        android:paddingLeft="10dp"
-        android:background="@color/CoolGray"
         android:layout_width="match_parent"
         android:layout_height="33dp"
-        android:layout_marginTop="3dp"
         android:layout_marginHorizontal="6dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/CoolGray"
         android:gravity="center_vertical"
-        android:text="6989228933"
+        android:paddingLeft="10dp"
+        android:text="6989471299"
         android:textColor="@color/logo_color"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -72,19 +71,99 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phone_label" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="6dp"
+        android:background="@drawable/rebranding_rounded_black"
+        android:paddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phone">
+
+        <TextView
+            android:id="@+id/contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:text="About us"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="3dp"
+            android:id="@+id/viewLine"
+            app:layout_constraintTop_toBottomOf="@id/contact"
+            android:background="@color/white" />
+
+        <TextView
+            android:id="@+id/linkedIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:drawableStart="@drawable/linkedin"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="follow me on LinkedIn"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewLine" />
+
+        <TextView
+            android:id="@+id/developer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
+            android:text="Giannis Fragoulis"
+            android:textColor="@android:color/holo_blue_light"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/developer1"
+            app:layout_constraintTop_toBottomOf="@+id/linkedIn" />
+
+        <TextView
+            android:id="@+id/developer1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
+            android:text="Developer:"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linkedIn" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/logout"
+        android:layout_width="122dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="44dp"
+        android:background="@drawable/rebranding_rounded_black"
         android:fontFamily="@font/nexalight"
-        android:textColor="@color/logo_color"
         android:gravity="center"
         android:text="Logout"
+        android:textColor="@color/CoolGray"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:id="@+id/logout"
-        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

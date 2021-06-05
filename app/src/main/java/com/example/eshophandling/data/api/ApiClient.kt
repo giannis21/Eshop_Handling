@@ -22,7 +22,6 @@ import retrofit2.http.*
 
 interface ApiClient {
 
-
     @Headers("Content-Type: application/json")
     @POST()
     suspend fun login(@Body loginUser: LoginUser, @Url url:String): Response<LoginUser>
@@ -39,13 +38,15 @@ interface ApiClient {
     @POST("api/rest_admin/products/getproductbysku/")
     suspend fun getProductPerSku(@Body barcode: String): Response<ResponseBody>
 
-    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @Headers("Content-Type: application/json")
+    // @Headers("Content-Type: application/x-www-form-urlencoded")
     @PUT("api/rest_admin/products/{id}")
     suspend fun submitProduct(@Path("id") id: String, @Body product: SubmittedProduct): Response<SubmittedProductResponse>
 
-    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @Headers("Content-Type: application/json")
     @PUT("api/rest_admin/allproducts/")
     suspend fun submitProducts(@Body products: SubmittedProducts): Response<ResponseBody>
+
 
     companion object {
 

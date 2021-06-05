@@ -111,8 +111,7 @@ class CardsFragment : Fragment(),ItemHandler {
         mAdapter!!.itemHandler=this
         recyclerview!!.adapter = mAdapter
 
-        mAdapterVertical = CardAdapter(requireContext(), viewModel.allProducts.value
-                ?: mutableListOf(), defaultScope, true)
+        mAdapterVertical = CardAdapter(requireContext(), viewModel.allProducts.value ?: mutableListOf(), defaultScope, true)
         verticalrecyclerview!!.adapter = mAdapterVertical
         mAdapterVertical!!.itemHandler=this
         initSwipe()
@@ -126,7 +125,7 @@ class CardsFragment : Fragment(),ItemHandler {
         show_bottomsheet.setSafeOnClickListener {
             showDialog()
         }
-
+        total_price.text="Σύνολο\n${viewModel.totalPrice}"
 
         recyclerview?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -232,6 +231,7 @@ class CardsFragment : Fragment(),ItemHandler {
 
         viewModel.productsDeleted.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it){
+                total_price.text="Σύνολο\n${viewModel.totalPrice}"
                 viewModel.deleteAllProducts()
                 viewModel.productsDeleted.postValue(false)
             }
@@ -276,6 +276,7 @@ class CardsFragment : Fragment(),ItemHandler {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 viewModel.removeItemAt(position)
+                total_price.text="Σύνολο\n${viewModel.totalPrice}"
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
@@ -298,6 +299,7 @@ class CardsFragment : Fragment(),ItemHandler {
     override fun onDelete(id: Int) {
         positionstxt.text = "${currentPosition}/${viewModel.allProducts.value?.size?.minus(1)}"
         viewModel.deleteProduct(id)
+        total_price.text="Σύνολο\n${viewModel.totalPrice}"
     }
 
     override fun onRefresh(position: Int, id: Int, quantity: String, price: String, isEnabled1: Boolean) {

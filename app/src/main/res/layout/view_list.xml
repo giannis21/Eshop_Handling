@@ -141,7 +141,7 @@
                              android:background="@color/zxing_transparent"
                              android:gravity="center"
                              android:layout_marginHorizontal="8dp"
-                             android:text="@{product.quantity_minus == null ? `1` : product.quantity_minus}"
+                             android:text="@{product.quantity_minus == null || product.quantity_minus == `0`? `1` : product.quantity_minus}"
                              android:textColor="@color/black"
                              android:textSize="16sp" />
 

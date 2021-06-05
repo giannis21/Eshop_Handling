@@ -1,5 +1,6 @@
 package com.example.eshophandling
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +14,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
+import com.example.alertlocation_kotlin.utils.Preferences
+import com.example.alertlocation_kotlin.utils.Preferences.token
 import com.example.eshophandling.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.banner_layout.view.*
@@ -31,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main2)
+        Preferences.sharedPref = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+
         val dm = resources.displayMetrics
 
         val density = dm.density * 160.toDouble()
@@ -69,15 +74,16 @@ class MainActivity : AppCompatActivity() {
 
         }
         errorListener = { error ->
+
             when (error) {
-                401 -> {
+                401,403 -> {
                     showBanner("Ουπς, υπάρχει κάποιο πρόβλημα!")
                     Handler(Looper.getMainLooper()).postDelayed({
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
                         finish()
-                    }, 5000)
-
+                    }, 4000)
+                    token=""
                 }
                 500 -> {
                     showBanner("server error!")

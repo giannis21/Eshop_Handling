@@ -2,11 +2,16 @@ package com.example.eshophandling.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Html
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.alertlocation_kotlin.utils.Preferences.token
 import com.example.eshophandling.MainActivity
@@ -14,12 +19,13 @@ import com.example.eshophandling.R
 import com.example.eshophandling.data.api.ApiClient
 import com.example.eshophandling.data.api.NetworkConnectionIncterceptor
 import com.example.eshophandling.data.api.NoInternetException
-import com.example.eshophandling.utils.Loading_dialog
 import com.example.eshophandling.ui.login.LoginActivity
+import com.example.eshophandling.utils.Loading_dialog
 import com.example.eshophandling.utils.setSafeOnClickListener
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,11 +50,21 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        com.example.alertlocation_kotlin.utils.Preferences.sharedPref = requireContext().getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        com.example.alertlocation_kotlin.utils.Preferences.sharedPref = requireContext().getSharedPreferences(
+            "sharedPref",
+            Context.MODE_PRIVATE
+        )
         val networkConnectionIncterceptor = NetworkConnectionIncterceptor(requireContext())
         val apiClient = ApiClient(networkConnectionIncterceptor)
 
-
+        developer.paintFlags = developer.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        linkedIn.paintFlags = developer.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        developer.setOnClickListener {
+             openToBrowser("https://www.linkedin.com/in/giannis-fragoulis-355877177/")
+        }
+        linkedIn.setOnClickListener {
+             openToBrowser("https://www.linkedin.com/in/adrian-mold-a1b73b167/?fbclid=IwAR2j1QpiktAxcFXr9YsbulpaCzLKS3dQgvUksbSNzpZZcl7UmFqjcnPzLbE")
+        }
         logout.setSafeOnClickListener {
             val dialog = Loading_dialog(requireContext())
             dialog.displayLoadingDialog()
@@ -68,7 +84,7 @@ class SettingsFragment : Fragment() {
                     if (it.isSuccessful) {
                          if (it.body()!!.success == 1) {
                              token = ""
-                             val intent = Intent (activity, LoginActivity::class.java)
+                             val intent = Intent(activity, LoginActivity::class.java)
                              activity?.startActivity(intent)
                              activity?.finish()
                           }
@@ -80,5 +96,13 @@ class SettingsFragment : Fragment() {
 
             }
         }
+    }
+
+    private fun openToBrowser(newUrl: String) {
+        try{
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse(newUrl)
+            view?.context?.startActivity(i)
+        }catch (e: Exception){}
     }
 }

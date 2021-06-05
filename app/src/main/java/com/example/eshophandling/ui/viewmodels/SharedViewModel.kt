@@ -32,6 +32,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
     var productsDeleted=MutableLiveData<Boolean>()
     val dialog: Loading_dialog
     var job:Job= Job()
+    var totalPrice:Float=0f
 
     init {
         allProducts = MutableLiveData<MutableList<Data>>()
@@ -90,7 +91,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
             val tempList=allProducts.value!!
             tempList.add(product)
             allProducts.postValue(tempList)
-
+            totalPrice += product.price.toFloat()
             viewModelScope.launch(Dispatchers.Default) {
                 allProducts_initial.postValue(tempList)
             }
@@ -133,6 +134,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
     fun deleteProduct(id: Int) {
         allProducts.value?.find { it.id == id }?.let {
             allProducts.value?.remove(it)
+            totalPrice -= it.price.toFloat()
         }
         allProducts.notifyObserver()
     }
@@ -148,6 +150,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
            val product = allProducts.value?.get(position)
            product?.let {
                allProducts.value?.remove(it)
+               totalPrice -= it.price.toFloat()
                allProducts.notifyObserver()
            }
 

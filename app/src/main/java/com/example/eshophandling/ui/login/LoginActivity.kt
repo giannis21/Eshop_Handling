@@ -169,6 +169,7 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel.LoggedIn.observe(this, Observer {
             if (it) {
+                viewModel.LoggedIn.postValue(false)
                 lastLoginDate = milliToDate(Calendar.getInstance().timeInMillis.toString())
                 startActivity(Intent(this, MainActivity::class.java))
             }
