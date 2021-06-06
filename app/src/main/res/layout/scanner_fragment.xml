@@ -14,6 +14,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/scrollview1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -120,6 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:visibility="gone"
+            android:backgroundTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -175,6 +177,7 @@
                     android:layout_marginHorizontal="5dp"
                     android:text="@string/add"
                     android:textAllCaps="false"
+                    android:backgroundTint="@color/logo_color"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -183,6 +186,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
+                    android:backgroundTint="@color/logo_color"
                     android:text="@string/exit"
                     android:textAllCaps="false"
                     android:textColor="@color/white"

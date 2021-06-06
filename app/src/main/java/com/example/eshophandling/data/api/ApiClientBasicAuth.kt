@@ -26,7 +26,7 @@ interface ApiClientBasicAuth {
         operator fun invoke(networkConnectionIncterceptor: NetworkConnectionIncterceptor): ApiClientBasicAuth {
 
 
-            println("token = $token")
+
            val logging = HttpLoggingInterceptor()
            logging.apply { logging.level = HttpLoggingInterceptor.Level.BODY }
 

@@ -89,7 +89,7 @@
             android:layout_marginHorizontal="6dp"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
-            android:text="About us"
+            android:text="Contact"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

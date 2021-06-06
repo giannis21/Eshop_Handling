@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         var screenInches:Double=0.0
     }
 
+    private var mainActivityAlive:Boolean=true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -77,13 +78,17 @@ class MainActivity : AppCompatActivity() {
 
             when (error) {
                 401,403 -> {
-                    showBanner("Ουπς, υπάρχει κάποιο πρόβλημα!")
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        val intent = Intent(this, LoginActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }, 4000)
-                    token=""
+                    if(mainActivityAlive)
+                    {
+                        showBanner("Ουπς, υπάρχει κάποιο πρόβλημα!")
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            val intent = Intent(this, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }, 4000)
+                        token=""
+                    }
+
                 }
                 500 -> {
                     showBanner("server error!")
@@ -96,6 +101,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mainActivityAlive=false
+    }
     private fun setStatusBarColor() {
         val window: Window = this.window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)

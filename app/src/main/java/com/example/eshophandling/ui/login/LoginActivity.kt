@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
         println("days--- $days")
 
-
+        url_container?.editText?.setText("www.status-sparta.gr")
         if (token?.isNotEmpty()!! && days <= 20) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -169,6 +169,7 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel.LoggedIn.observe(this, Observer {
             if (it) {
+                println("mpikee $it")
                 viewModel.LoggedIn.postValue(false)
                 lastLoginDate = milliToDate(Calendar.getInstance().timeInMillis.toString())
                 startActivity(Intent(this, MainActivity::class.java))

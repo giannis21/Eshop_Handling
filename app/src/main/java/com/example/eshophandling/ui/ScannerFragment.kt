@@ -146,6 +146,7 @@ class ScannerFragment : Fragment() {
             if(checkPermission()){
                 barcodeView!!.resume()
                 barcodeView!!.setTorchOff()
+                scrollview1.visibility=View.GONE
                 cameraScanner.visibility=View.VISIBLE
                 flash_light.visibility=View.VISIBLE
             }else{
@@ -170,6 +171,7 @@ class ScannerFragment : Fragment() {
 
         }
         exit_scan.setSafeOnClickListener {
+            scrollview1.visibility=View.VISIBLE
             custom_barcode_view!!.visibility=View.GONE
             cameraScanner.visibility=View.GONE
             flash_light.visibility=View.GONE
