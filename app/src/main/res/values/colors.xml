@@ -14,7 +14,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="Gray3">#949494</color>
     <color name="Black3">#242424</color>
-    <color name="CoolGray">#EDEDED</color>
+    <color name="CoolGray">#EDEDED</color>   android:background="@color/CoolGray"
     <color name="logo_color">#01233F</color>
     <color name="success_color">#3DB49E</color>
     <color name="LightRed">#ED6565</color>

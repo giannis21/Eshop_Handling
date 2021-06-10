@@ -6,7 +6,7 @@
     <data>
         <variable
             name="product"
-            type="com.example.eshophandling.data.model.product_response.Data" />
+            type="com.frag.eshophandling.data.model.product_response.Data" />
     </data>
 
 
@@ -181,7 +181,8 @@
                          android:gravity="center"
                          android:maxLines="1"
                          android:ellipsize="end"
-                         android:text="@{String.valueOf(product.price)}"
+                         android:text="@{String.valueOf(product.getCorrectPrice())}"
+                         tools:text="100.1323000000000000"
                          android:textColor="@color/logo_color"
                          android:textSize="16sp"
                          android:textStyle="bold"

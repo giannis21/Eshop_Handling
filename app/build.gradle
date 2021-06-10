@@ -11,7 +11,7 @@ android {
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.example.eshophandling"
+        applicationId "com.frag.eshophandling"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1

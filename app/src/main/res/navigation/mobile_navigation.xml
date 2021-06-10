@@ -8,17 +8,17 @@
     <fragment
         android:id="@+id/scannerFragment"
 
-        android:name="com.example.eshophandling.ui.ScannerFragment"
+        android:name="com.frag.eshophandling.ui.ScannerFragment"
         android:label="scanner_fragment"
         tools:layout="@layout/scanner_fragment" />
     <fragment
         android:id="@+id/cardsFragment"
-        android:name="com.example.eshophandling.ui.cards.CardsFragment"
+        android:name="com.frag.eshophandling.ui.cards.CardsFragment"
         android:label="fragment_cards"
         tools:layout="@layout/fragment_cards" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.eshophandling.ui.SettingsFragment"
+        android:name="com.frag.eshophandling.ui.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <action android:id="@+id/action_global_scannerFragment" app:destination="@id/scannerFragment" app:popUpTo="@id/scannerFragment" />

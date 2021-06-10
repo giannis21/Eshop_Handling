@@ -6,7 +6,7 @@
     <data>
         <variable
             name="productObj"
-            type="com.example.eshophandling.data.model.product_response.Data" />
+            type="com.frag.eshophandling.data.model.product_response.Data" />
 
 
     </data>
@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:imeOptions="actionDone"
-                android:text="@{String.valueOf(productObj.price)}"
+                android:text="@{String.valueOf(productObj.getCorrectPrice())}"
 
                 app:layout_constraintEnd_toEndOf="@+id/pricetxt"
                 app:layout_constraintStart_toStartOf="@+id/pricetxt"
