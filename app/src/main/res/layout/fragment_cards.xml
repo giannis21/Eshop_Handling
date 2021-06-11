@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/empty_placeholder"
-        android:layout_width="229dp"
-        android:layout_height="188dp"
+        android:layout_width="168dp"
+        android:layout_height="137dp"
         android:src="@drawable/shoppingbasket"
-        android:visibility="gone"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

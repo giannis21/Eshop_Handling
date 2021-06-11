@@ -296,9 +296,12 @@ class CardsFragment : Fragment(),ItemHandler {
 
     @SuppressLint("SetTextI18n")
     override fun onDelete(id: Int) {
-        positionstxt.text = "${currentPosition}/${viewModel.allProducts.value?.size?.minus(1)}"
-        viewModel.deleteProduct(id)
-        total_price.text="Σύνολο\n${viewModel.totalPrice}"
+        try {
+            positionstxt.text = "${currentPosition}/${viewModel.allProducts.value?.size?.minus(1)}"
+            viewModel.deleteProduct(id)
+            total_price.text="Σύνολο\n${viewModel.totalPrice}"
+        }catch (e:Exception){}
+
     }
 
     override fun onRefresh(position: Int, id: Int, quantity: String, price: String, isEnabled1: Boolean) {

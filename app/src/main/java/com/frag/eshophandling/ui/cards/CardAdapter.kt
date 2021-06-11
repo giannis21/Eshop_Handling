@@ -155,8 +155,11 @@ class CardAdapter(var context: Context, products: MutableList<Data>, private var
             }
 
             holder.viewCardsBinding.deleteCard.setSafeOnClickListener {
-                if(position >=0 && holder.adapterPosition < itemCount)
-                    itemHandler?.onDelete(products_list[holder.adapterPosition].id)
+                try {
+                    if(position >=0 && holder.adapterPosition < itemCount)
+                        itemHandler?.onDelete(products_list[holder.adapterPosition].id)
+                }catch (e:Exception){}
+
             }
         }
         private inner class CustomEditTextListener(var holder: ItemViewHolder,var inputField: String) : TextWatcher {

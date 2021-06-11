@@ -55,13 +55,14 @@ class SettingsFragment : Fragment() {
         val apiClient = ApiClient(networkConnectionIncterceptor)
 
         developer.paintFlags = developer.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        linkedIn.paintFlags = developer.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        webDev.paintFlags = developer.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         developer.setOnClickListener {
              openToBrowser("https://www.linkedin.com/in/giannis-fragoulis-355877177/")
         }
-        linkedIn.setOnClickListener {
+        webDev.setOnClickListener {
              openToBrowser("https://www.linkedin.com/in/adrian-mold-a1b73b167/?fbclid=IwAR2j1QpiktAxcFXr9YsbulpaCzLKS3dQgvUksbSNzpZZcl7UmFqjcnPzLbE")
         }
+
         logout.setSafeOnClickListener {
             val dialog = Loading_dialog(requireContext())
             dialog.displayLoadingDialog()

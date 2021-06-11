@@ -8,152 +8,190 @@
     android:layout_marginVertical="80dp"
     android:background="@drawable/background_with_shadow"
     tools:context=".ui.ScannerFragment">
+<ScrollView
+    android:layout_width="match_parent"
+    android:paddingBottom="65dp"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/email_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/nexalight"
-        android:gravity="center"
-        android:text="email"
-
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="33dp"
-        android:layout_marginHorizontal="6dp"
-        android:layout_marginTop="3dp"
-        android:background="@color/CoolGray"
-        android:gravity="center_vertical"
-        android:paddingStart="10dp"
-        android:text="adrian.mol@hotmail.com"
-        android:textColor="@color/logo_color"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_label" />
-
-    <TextView
-        android:id="@+id/phone_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/nexalight"
-        android:gravity="center"
-        android:text="τηλέφωνο"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
-
-    <TextView
-        android:id="@+id/phone"
-        android:layout_width="match_parent"
-        android:layout_height="33dp"
-        android:layout_marginHorizontal="6dp"
-        android:layout_marginTop="3dp"
-        android:background="@color/CoolGray"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:text="6989471299"
-        android:textColor="@color/logo_color"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_label" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="6dp"
-        android:background="@drawable/rebranding_rounded_black"
-        android:paddingBottom="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/contact"
+            android:id="@+id/email_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="6dp"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical"
-            android:text="Contact"
-            android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/nexalight"
+            android:gravity="center"
+            android:text="email"
+
+            android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="3dp"
-            android:id="@+id/viewLine"
-            app:layout_constraintTop_toBottomOf="@id/contact"
-            android:background="@color/white" />
-
         <TextView
-            android:id="@+id/linkedIn"
+            android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:drawableStart="@drawable/linkedin"
-            android:drawablePadding="10dp"
+            android:layout_height="33dp"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/CoolGray"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:text="follow me on LinkedIn"
-            android:textColor="@android:color/holo_blue_light"
+            android:paddingStart="10dp"
+            android:text="adrian.mol@hotmail.com"
+            android:textColor="@color/logo_color"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewLine" />
+            app:layout_constraintTop_toBottomOf="@+id/email_label" />
 
         <TextView
-            android:id="@+id/developer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="6dp"
-            android:layout_marginTop="15dp"
-            android:gravity="center_vertical"
-            android:text="Giannis Fragoulis"
-            android:textColor="@android:color/holo_blue_light"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/developer1"
-            app:layout_constraintTop_toBottomOf="@+id/linkedIn" />
-
-        <TextView
-            android:id="@+id/developer1"
+            android:id="@+id/phone_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="6dp"
-            android:layout_marginTop="15dp"
-            android:gravity="center_vertical"
-            android:text="Developer:"
-            android:textColor="@android:color/white"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/nexalight"
+            android:gravity="center"
+            android:text="τηλέφωνο"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linkedIn" />
+            app:layout_constraintTop_toBottomOf="@+id/email" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/CoolGray"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="6989471299"
+            android:textColor="@color/logo_color"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone_label" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rebranding_rounded_black"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone">
+
+            <TextView
+                android:id="@+id/contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:text="Contact"
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/viewLine"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/contact" />
+
+            <TextView
+                android:id="@+id/linkedIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:drawableStart="@drawable/linkedin"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="follow us on LinkedIn"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewLine" />
+
+            <TextView
+                android:id="@+id/developer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical"
+                android:text="Giannis Fragoulis"
+                android:textColor="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/developer1"
+                app:layout_constraintTop_toBottomOf="@+id/linkedIn" />
+
+            <TextView
+                android:id="@+id/developer1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical"
+                android:text="Android developer:"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linkedIn" />
+
+
+            <TextView
+                android:id="@+id/webDev"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Adrian Moldovanu"
+                android:textColor="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/developer"
+                app:layout_constraintTop_toTopOf="@+id/webdeveloperTxt" />
+
+            <TextView
+                android:id="@+id/webdeveloperTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Web developer:"
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="@+id/developer1"
+                app:layout_constraintTop_toBottomOf="@+id/developer" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+</ScrollView>
     <TextView
         android:id="@+id/logout"
         android:layout_width="122dp"
         android:layout_height="35dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/rebranding_rounded_black"
         android:fontFamily="@font/nexalight"
         android:gravity="center"
@@ -165,5 +203,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
