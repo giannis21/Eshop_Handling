@@ -9,19 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.frag.alertlocation_kotlin.utils.Preferences.token
 import com.frag.eshophandling.MainActivity
+import com.frag.eshophandling.MyApplication
 import com.frag.eshophandling.R
 import com.frag.eshophandling.data.api.ApiClient
 import com.frag.eshophandling.data.api.NetworkConnectionIncterceptor
 import com.frag.eshophandling.data.api.NoInternetException
-import com.frag.eshophandling.ui.login.LoginActivity
+ import com.frag.eshophandling.ui.login.LoginActivity
+import com.frag.eshophandling.ui.viewmodels.SharedViewModel
 import com.frag.eshophandling.utils.Loading_dialog
 import com.frag.eshophandling.utils.setSafeOnClickListener
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Provider
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -34,8 +39,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [SettingsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+//typealias MainComponentProvider = Provider<MainComponent>
 class SettingsFragment : Fragment() {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    val viewModel: SharedViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(SharedViewModel::class.java)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,8 +62,7 @@ class SettingsFragment : Fragment() {
             "sharedPref",
             Context.MODE_PRIVATE
         )
-        val networkConnectionIncterceptor = NetworkConnectionIncterceptor(requireContext())
-        val apiClient = ApiClient(networkConnectionIncterceptor)
+
 
         developer.paintFlags = developer.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         webDev.paintFlags = developer.paintFlags or Paint.UNDERLINE_TEXT_FLAG
@@ -64,36 +74,41 @@ class SettingsFragment : Fragment() {
         }
 
         logout.setSafeOnClickListener {
-            val dialog = Loading_dialog(requireContext())
-            dialog.displayLoadingDialog()
-
-            lifecycleScope.launch(Dispatchers.Default) {
-                runCatching {
-                    apiClient.logout()
-                }.onFailure {
-                    if(it is NoInternetException){
-                        (activity as MainActivity?)?.showBanner("Δεν υπάρχει σύνδεση στο internet!")
-                    }
-
-                    dialog.hideLoadingDialog()
-                }.onSuccess {
-                    dialog.hideLoadingDialog()
-
-                    if (it.isSuccessful) {
-                         if (it.body()!!.success == 1) {
-                             token = ""
-                             val intent = Intent(activity, LoginActivity::class.java)
-                             activity?.startActivity(intent)
-                             activity?.finish()
-                          }
-                    } else {
-                          (activity as MainActivity?)?.showBanner("Ουπς, κάτι πήγε λάθος!")
-                    }
-
-                }
-
-            }
+//            val dialog = Loading_dialog(requireContext())
+//            dialog.displayLoadingDialog()
+//
+//            lifecycleScope.launch(Dispatchers.Default) {
+//                runCatching {
+//                    apiClient.logout()
+//                }.onFailure {
+//                    if(it is NoInternetException){
+//                        (activity as MainActivity?)?.showBanner("Δεν υπάρχει σύνδεση στο internet!")
+//                    }
+//
+//                    dialog.hideLoadingDialog()
+//                }.onSuccess {
+//                    dialog.hideLoadingDialog()
+//
+//                    if (it.isSuccessful) {
+//                         if (it.body()!!.success == 1) {
+//                             token = ""
+//                             val intent = Intent(activity, LoginActivity::class.java)
+//                             activity?.startActivity(intent)
+//                             activity?.finish()
+//                          }
+//                    } else {
+//                          (activity as MainActivity?)?.showBanner("Ουπς, κάτι πήγε λάθος!")
+//                    }
+//
+//                }
+//
+//            }
         }
+    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity?.application as MyApplication).appComponent.inject(this)
+        // (context as MainComponentProvider).get().inject(this)
     }
 
     private fun openToBrowser(newUrl: String) {

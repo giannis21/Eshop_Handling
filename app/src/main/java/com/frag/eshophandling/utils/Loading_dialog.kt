@@ -18,17 +18,17 @@ class Loading_dialog(var context: Context) {
 
 
     fun displayLoadingDialog() {
-        if (view2.parent != null) {
-            (view2.parent as ViewGroup).removeView(view2)
-        }
-
-        builder.setView(view2)
-        alertDialog1 = builder.create()
-        alertDialog1.show()
+//        if (view2.parent != null) {
+//            (view2.parent as ViewGroup).removeView(view2)
+//        }
+//
+//        builder.setView(view2)
+//        alertDialog1 = builder.create()
+//        alertDialog1.show()
 
     }
 
     fun hideLoadingDialog() {
-        alertDialog1.dismiss()
+      // alertDialog1.dismiss()
     }
 }

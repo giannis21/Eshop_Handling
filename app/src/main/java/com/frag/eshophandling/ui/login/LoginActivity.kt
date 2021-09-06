@@ -22,12 +22,13 @@ import com.frag.alertlocation_kotlin.utils.Preferences.BaseUrl
 import com.frag.alertlocation_kotlin.utils.Preferences.lastLoginDate
 import com.frag.alertlocation_kotlin.utils.Preferences.token
 import com.frag.eshophandling.MainActivity
+import com.frag.eshophandling.MyApplication
 import com.frag.eshophandling.R
 import com.frag.eshophandling.data.api.ApiClient
 import com.frag.eshophandling.data.api.ApiClientBasicAuth
 import com.frag.eshophandling.data.api.RemoteRepository
 import com.frag.eshophandling.data.api.NetworkConnectionIncterceptor
-import com.frag.eshophandling.ui.viewmodels.LoginViewModel
+ import com.frag.eshophandling.ui.viewmodels.LoginViewModel
 import com.frag.eshophandling.utils.getDateInMilli
 import com.frag.eshophandling.utils.hideKeyboard
 import com.frag.eshophandling.utils.milliToDate
@@ -35,18 +36,31 @@ import com.frag.eshophandling.ui.viewmodels.ViewmodelFactory
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.banner_layout.view.*
 import java.util.*
+import javax.inject.Inject
 
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var viewModelFactory: ViewmodelFactory
-    private lateinit var viewModel: LoginViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    val viewModel: LoginViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
+    }
+  //  lateinit var loginComponent: LoginComponent
+
     private var fieldsFilled = false
     private var isPasswordVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
+       (application as MyApplication).appComponent.inject(this)
+     //   loginComponent.inject(this)
         super.onCreate(savedInstanceState)
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_login)
         setStatusBarColor()
+
         window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         Preferences.sharedPref = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
 
@@ -64,13 +78,6 @@ class LoginActivity : AppCompatActivity() {
             group.visibility = View.VISIBLE
         }
 
-        val networkConnectionIncterceptor = this.applicationContext?.let { NetworkConnectionIncterceptor(it) }
-        val apiClient = ApiClient(networkConnectionIncterceptor!!)
-        val apiClientBasic = ApiClientBasicAuth(networkConnectionIncterceptor)
-        val repository = RemoteRepository(apiClient, apiClientBasic)
-
-        viewModelFactory = ViewmodelFactory(repository, this)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
 
 
         submit_btn.setOnClickListener {

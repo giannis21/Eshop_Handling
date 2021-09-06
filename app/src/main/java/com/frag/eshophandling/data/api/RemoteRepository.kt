@@ -10,8 +10,9 @@ import com.frag.eshophandling.data.model.loginResponse.loginresponse.Credentials
 import com.frag.eshophandling.data.model.loginResponse.login.LoginUser
 import okhttp3.ResponseBody
 import retrofit2.Response
+import javax.inject.Inject
 
-class RemoteRepository(private val my_Api: ApiClient, var apiClientBasic: ApiClientBasicAuth) {
+class RemoteRepository @Inject constructor(private val my_Api: ApiClient, var apiClientBasic: ApiClientBasicAuth) {
 
     suspend fun login(loginUser: LoginUser, url:String): Response<LoginUser> {
         return my_Api.login(loginUser,url)

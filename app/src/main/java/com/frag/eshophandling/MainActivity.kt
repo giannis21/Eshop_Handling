@@ -15,12 +15,13 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.frag.alertlocation_kotlin.utils.Preferences
 import com.frag.alertlocation_kotlin.utils.Preferences.token
-import com.frag.eshophandling.ui.login.LoginActivity
+ import com.frag.eshophandling.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.banner_layout.view.*
+import javax.inject.Provider
 
-
-class MainActivity : AppCompatActivity() {
+ class MainActivity : AppCompatActivity() {
+   // lateinit var mainComponent: MainComponent
 
     companion object{
         var errorListener: ((Int) ->Unit) ?=null
@@ -28,9 +29,18 @@ class MainActivity : AppCompatActivity() {
         var screenInches:Double=0.0
     }
 
+
     private var mainActivityAlive:Boolean=true
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as MyApplication).appComponent.inject(this)
+        // (context as MainComponentProvider).get().inject(this)
+
         super.onCreate(savedInstanceState)
+        val appComp = (applicationContext as MyApplication).appComponent
+        // 5
+//        mainComponent = DaggerMainComponent.builder()
+//            .appComponent(appComp)
+//            .build()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main2)
         Preferences.sharedPref = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)

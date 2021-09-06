@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.frag.alertlocation_kotlin.utils.Preferences
 import com.frag.eshophandling.MainActivity
+import com.frag.eshophandling.MyApplication
 import com.frag.eshophandling.R
 import com.frag.eshophandling.data.api.ApiClient
 import com.frag.eshophandling.data.api.ApiClientBasicAuth
@@ -36,16 +37,21 @@ import kotlinx.android.synthetic.main.scanner_fragment.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import java.util.*
+import javax.inject.Inject
 
 
-class ScannerFragment : Fragment() {
+    class ScannerFragment : Fragment() {
 
     companion object {
         fun newInstance() = ScannerFragment()
     }
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var viewModel: SharedViewModel
-    private lateinit var viewModelFactory: ViewmodelFactory
+    val viewModel: SharedViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(SharedViewModel::class.java)
+    }
+
     private var barcodeView: DecoratedBarcodeView? = null
     private var beepManager: BeepManager? = null
     private var lastText: String? = null
@@ -94,14 +100,6 @@ class ScannerFragment : Fragment() {
         barcodeView!!.initializeFromIntent(activity?.intent)
         barcodeView!!.decodeContinuous(callback)
         beepManager = BeepManager(activity)
-
-        val networkConnectionIncterceptor = this.let { NetworkConnectionIncterceptor(requireContext()) }
-        val apiClient = ApiClient(networkConnectionIncterceptor)
-        val apiClientBasic = ApiClientBasicAuth(networkConnectionIncterceptor)
-        val repository = RemoteRepository(apiClient, apiClientBasic)
-
-        viewModelFactory = ViewmodelFactory(repository, requireContext())
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel::class.java)
 
         if(MainActivity.screenInches <=5.0)
         KeyboardVisibilityEvent.setEventListener(((activity as? FragmentActivity)!!),
@@ -261,6 +259,10 @@ class ScannerFragment : Fragment() {
         editText.setSelection(editText.text.length)
     }
 
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+       (activity?.application as MyApplication).appComponent.inject(this)
+        //   (context as MainComponentProvider).get().inject(this)
+    }
 
 }

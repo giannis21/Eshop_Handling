@@ -12,16 +12,19 @@ import com.frag.alertlocation_kotlin.utils.Preferences.useBearer
 import com.frag.eshophandling.data.api.NoInternetException
 import com.frag.eshophandling.data.api.RemoteRepository
 import com.frag.eshophandling.data.model.loginResponse.login.LoginUser
+import com.frag.eshophandling.di.LoginActivityScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.UnsupportedEncodingException
 import java.net.UnknownHostException
+import javax.inject.Inject
+import javax.inject.Singleton
 import javax.net.ssl.SSLPeerUnverifiedException
 
-
-class LoginViewModel(var remoteRepository: RemoteRepository, var context: Context) : ViewModel() {
+@Singleton
+class LoginViewModel @Inject constructor(var remoteRepository: RemoteRepository, var context: Context) : ViewModel() {
 
     var LoggedIn = MutableLiveData<Boolean>(false)
     var token1 =MutableLiveData<String>("")

@@ -10,6 +10,7 @@
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/logoicon"
         android:label="@string/app_name"

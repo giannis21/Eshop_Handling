@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.*
 import com.frag.alertlocation_kotlin.utils.Preferences.username
 import com.frag.eshophandling.MainActivity
+import com.frag.eshophandling.MyApplication
 import com.frag.eshophandling.R
 import com.frag.eshophandling.ui.viewmodels.SharedViewModel
 import com.frag.eshophandling.data.api.ApiClient
@@ -24,6 +25,7 @@ import com.frag.eshophandling.data.api.ApiClientBasicAuth
 import com.frag.eshophandling.data.api.NetworkConnectionIncterceptor
 import com.frag.eshophandling.data.api.RemoteRepository
 import com.frag.eshophandling.data.model.submit_product.SubmittedProduct
+ import com.frag.eshophandling.ui.viewmodels.LoginViewModel
 import com.frag.eshophandling.utils.milliToDate
 import com.frag.eshophandling.utils.setSafeOnClickListener
 import com.frag.eshophandling.ui.viewmodels.ViewmodelFactory
@@ -33,6 +35,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Provider
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -45,7 +49,15 @@ private const val ARG_PARAM2 = "param2"
  * Use the [CardsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+//typealias MainComponentProvider = Provider<MainComponent>
+
 class CardsFragment : Fragment(),ItemHandler {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    val viewModel: SharedViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(SharedViewModel::class.java)
+    }
 
     private var isScrolling=false
     var recyclerview: RecyclerView? = null
@@ -55,8 +67,7 @@ class CardsFragment : Fragment(),ItemHandler {
     var mAdapterVertical: CardAdapter? = null
     private val job = SupervisorJob()
     private val defaultScope = CoroutineScope(Dispatchers.Default + job)
-    private lateinit var viewModel: SharedViewModel
-    private lateinit var viewModelFactory: ViewmodelFactory
+
     private var currentPosition=0
     private var adapterCountItems=0
     var showCards=true
@@ -89,13 +100,12 @@ class CardsFragment : Fragment(),ItemHandler {
         recyclerview=view.findViewById(R.id.recyclerview)
         verticalrecyclerview=view.findViewById(R.id.verticalrecyclerview)
 
-        val networkConnectionIncterceptor = this.let { NetworkConnectionIncterceptor(requireContext()) }
-        val apiClient = ApiClient(networkConnectionIncterceptor)
-        val apiClientBasic = ApiClientBasicAuth(networkConnectionIncterceptor)
-        val repository = RemoteRepository(apiClient, apiClientBasic)
+//        val networkConnectionIncterceptor = this.let { NetworkConnectionIncterceptor(requireContext()) }
+//        val apiClient = ApiClient(networkConnectionIncterceptor)
+//        val apiClientBasic = ApiClientBasicAuth(networkConnectionIncterceptor)
+//        val repository = RemoteRepository(apiClient, apiClientBasic)
 
-        viewModelFactory = ViewmodelFactory(repository, requireContext())
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel::class.java)
+
 
 
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -365,4 +375,9 @@ class CardsFragment : Fragment(),ItemHandler {
         alertDialog.show()
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+      (activity?.application as MyApplication).appComponent.inject(this)
+        //  (context as MainComponentProvider).get().inject(this)
+    }
 }

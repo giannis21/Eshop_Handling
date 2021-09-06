@@ -12,13 +12,17 @@ import com.frag.eshophandling.data.model.product_response.Data
 import com.frag.eshophandling.data.model.submit_product.SubmittedProduct
 import com.frag.eshophandling.data.model.submit_products.Data1
 import com.frag.eshophandling.data.model.submit_products.SubmittedProducts
+import com.frag.eshophandling.di.MainActivityScope
 import com.frag.eshophandling.utils.milliToDate
 import kotlinx.coroutines.*
 import java.io.IOException
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.jvm.Throws
 
-class SharedViewModel(var remoteRepository: RemoteRepository, var context: Context) : ViewModel() {
+@Singleton
+class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository,var context: Context ) : ViewModel() {
 
     var allProducts: MutableLiveData<MutableList<Data>>
     var allProducts_initial: MutableLiveData<MutableList<Data>>

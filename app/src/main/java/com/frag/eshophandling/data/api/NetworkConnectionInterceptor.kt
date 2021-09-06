@@ -4,9 +4,10 @@ import android.content.Context
 import okhttp3.Interceptor
 
 import okhttp3.Response
+import javax.inject.Inject
 
 
-class NetworkConnectionIncterceptor(context: Context) : Interceptor {
+class NetworkConnectionIncterceptor @Inject constructor(context: Context) : Interceptor {
 
     private val applicationContext: Context = context.applicationContext
 
