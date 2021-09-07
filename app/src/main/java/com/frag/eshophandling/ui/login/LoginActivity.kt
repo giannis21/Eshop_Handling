@@ -33,6 +33,7 @@ import com.frag.eshophandling.utils.getDateInMilli
 import com.frag.eshophandling.utils.hideKeyboard
 import com.frag.eshophandling.utils.milliToDate
 import com.frag.eshophandling.ui.viewmodels.ViewmodelFactory
+import com.frag.eshophandling.utils.Datastore
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.banner_layout.view.*
 import java.util.*
@@ -44,6 +45,8 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    @Inject
+    lateinit var DatastoreImpl: Datastore
     val viewModel: LoginViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
     }
@@ -159,6 +162,7 @@ class LoginActivity : AppCompatActivity() {
         temp = textViewHttp.text.toString() + temp + "/"
 
         BaseUrl = temp
+        DatastoreImpl.addBaseUrl(temp)
         return temp + "api/rest_admin/oauth2/token/client_credentials"
     }
 

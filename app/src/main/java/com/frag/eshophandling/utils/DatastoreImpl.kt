@@ -3,7 +3,9 @@ package com.frag.eshophandling.utils
 import android.content.Context
 import com.frag.alertlocation_kotlin.utils.Preferences
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class DatastoreImpl @Inject constructor(var context: Context): Datastore {
 
     val sharedPref= context.applicationContext.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
