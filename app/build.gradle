@@ -26,6 +26,26 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        openCart {
+            dimension "version"
+            applicationIdSuffix ".openCart"
+            versionNameSuffix "-openCart"
+        }
+        wordpress {
+            dimension "version"
+            applicationIdSuffix ".wordpress"
+            versionNameSuffix "-wordpress"
+        }
+        presta {
+            dimension "version"
+            applicationIdSuffix ".presta"
+            versionNameSuffix "-presta"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

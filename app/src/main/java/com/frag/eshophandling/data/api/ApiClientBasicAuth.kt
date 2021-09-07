@@ -16,7 +16,7 @@ interface ApiClientBasicAuth {
 
 
     @POST()
-    suspend fun getCredentials(@Header("Authorization") h1: String, @Url url: String): Response<CredentialsResponse>
+    suspend fun getCredentials(@Header("Authorization") h1: String, @Url url: String): Response<CredentialsResponse>////
 
     companion object {
 
