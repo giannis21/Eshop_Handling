@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:layout_width="500dp"
         android:layout_height="500dp"
@@ -104,5 +105,10 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/mobile_navigation" />
 
-
+    <FrameLayout
+        android:id="@+id/loaderFrameLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
 </RelativeLayout>

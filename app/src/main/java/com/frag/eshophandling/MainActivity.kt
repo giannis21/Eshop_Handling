@@ -12,12 +12,16 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.frag.alertlocation_kotlin.utils.Preferences
-import com.frag.alertlocation_kotlin.utils.Preferences.token
- import com.frag.eshophandling.ui.login.LoginActivity
+import com.frag.eshophandling.ui.login.LoginActivity
+import com.frag.eshophandling.ui.viewmodels.LoginViewModel
+import com.frag.eshophandling.ui.viewmodels.SharedViewModel
+import com.frag.eshophandling.utils.Datastore
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.banner_layout.view.*
+import javax.inject.Inject
 import javax.inject.Provider
 
  class MainActivity : AppCompatActivity() {
@@ -29,21 +33,27 @@ import javax.inject.Provider
         var screenInches:Double=0.0
     }
 
+     @Inject
+     lateinit var DatastoreImpl: Datastore
 
+     @Inject
+     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+
+     val viewModel: SharedViewModel by lazy {
+         ViewModelProvider(this, viewModelFactory).get(SharedViewModel::class.java)
+     }
     private var mainActivityAlive:Boolean=true
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as MyApplication).appComponent.inject(this)
-        // (context as MainComponentProvider).get().inject(this)
-
         super.onCreate(savedInstanceState)
-        val appComp = (applicationContext as MyApplication).appComponent
         // 5
 //        mainComponent = DaggerMainComponent.builder()
 //            .appComponent(appComp)
 //            .build()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main2)
-        Preferences.sharedPref = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        //Preferences.sharedPref = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
 
         val dm = resources.displayMetrics
 
@@ -94,7 +104,7 @@ import javax.inject.Provider
                             startActivity(intent)
                             finish()
                         }, 4000)
-                        token=""
+                        DatastoreImpl.setToken("")
                     }
 
                 }
@@ -105,10 +115,30 @@ import javax.inject.Provider
             }
         }
 
-
+        viewModel.showLoader.observe(this, Observer {
+            it?.let {
+                if (it)
+                    showGenericLoader()
+                else
+                    hideGenericLoader()
+            }
+        })
 
     }
+     private fun showGenericLoader() {
+         val view: View = LayoutInflater.from(this).inflate(R.layout.generic_loader_layout, null)
+         runOnUiThread {
+             loaderFrameLayout?.let { cLayout ->
+                 cLayout.addView(view, 0)
+             }
+         }
+     }
 
+     private fun hideGenericLoader() {
+         runOnUiThread {
+             loaderFrameLayout.removeAllViews()
+         }
+     }
     override fun onDestroy() {
         super.onDestroy()
         mainActivityAlive=false

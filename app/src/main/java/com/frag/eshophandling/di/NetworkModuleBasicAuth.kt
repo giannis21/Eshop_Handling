@@ -7,6 +7,7 @@ import com.frag.eshophandling.data.api.ApiClient
 import com.frag.eshophandling.data.api.ApiClientBasicAuth
 import com.frag.eshophandling.data.api.BasicAuthInterceptor
 import com.frag.eshophandling.data.api.NetworkConnectionIncterceptor
+import com.frag.eshophandling.utils.Datastore
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -23,7 +24,7 @@ class NetworkModuleBasicAuth {
 
   @Singleton
   @Provides
-  internal fun provideBasicAuthInstance(networkConnectionIncterceptor: NetworkConnectionIncterceptor): ApiClientBasicAuth {
+  internal fun provideBasicAuthInstance(networkConnectionIncterceptor: NetworkConnectionIncterceptor,secureDatastore: Datastore): ApiClientBasicAuth {
 
     val logging = HttpLoggingInterceptor()
     logging.apply { logging.level = HttpLoggingInterceptor.Level.BODY }
@@ -35,7 +36,7 @@ class NetworkModuleBasicAuth {
         .addInterceptor(logging)
 
     return Retrofit.Builder().client(okHttpClient1.build())
-        .baseUrl(Preferences.BaseUrl!!)
+        .baseUrl(secureDatastore.getBaseUrl())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(ApiClientBasicAuth::class.java)

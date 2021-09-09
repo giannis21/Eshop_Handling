@@ -15,20 +15,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.*
-import com.frag.alertlocation_kotlin.utils.Preferences.username
 import com.frag.eshophandling.MainActivity
 import com.frag.eshophandling.MyApplication
 import com.frag.eshophandling.R
 import com.frag.eshophandling.ui.viewmodels.SharedViewModel
-import com.frag.eshophandling.data.api.ApiClient
-import com.frag.eshophandling.data.api.ApiClientBasicAuth
-import com.frag.eshophandling.data.api.NetworkConnectionIncterceptor
-import com.frag.eshophandling.data.api.RemoteRepository
 import com.frag.eshophandling.data.model.submit_product.SubmittedProduct
- import com.frag.eshophandling.ui.viewmodels.LoginViewModel
+import com.frag.eshophandling.utils.Datastore
 import com.frag.eshophandling.utils.milliToDate
 import com.frag.eshophandling.utils.setSafeOnClickListener
-import com.frag.eshophandling.ui.viewmodels.ViewmodelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.fragment_cards.*
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import java.util.*
 import javax.inject.Inject
-import javax.inject.Provider
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -58,6 +51,9 @@ class CardsFragment : Fragment(),ItemHandler {
     val viewModel: SharedViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(SharedViewModel::class.java)
     }
+
+    @Inject
+    lateinit var datastore: Datastore
 
     private var isScrolling=false
     var recyclerview: RecyclerView? = null
@@ -298,7 +294,7 @@ class CardsFragment : Fragment(),ItemHandler {
     override fun onSubmit(position: Int, id: Int, quantity: String, price: String, isEnabled1: Boolean)  {
         val product= viewModel.allProducts.value?.find { it.id == id }
         product?.let {
-            val prod_to_be_submitted= SubmittedProduct(product.id, price.toFloat(), quantity.toInt(), product.sku, if (isEnabled1) 1 else 0, username!!, milliToDate(Calendar.getInstance().timeInMillis.toString(),true))
+            val prod_to_be_submitted= SubmittedProduct(product.id, price.toFloat(), quantity.toInt(), product.sku, if (isEnabled1) 1 else 0, datastore.getUsername(), milliToDate(Calendar.getInstance().timeInMillis.toString(),true))
             viewModel.submitProduct(prod_to_be_submitted)
         }
 
@@ -377,7 +373,6 @@ class CardsFragment : Fragment(),ItemHandler {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-      (activity?.application as MyApplication).appComponent.inject(this)
-        //  (context as MainComponentProvider).get().inject(this)
+        (activity?.application as MyApplication).appComponent.inject(this)
     }
 }

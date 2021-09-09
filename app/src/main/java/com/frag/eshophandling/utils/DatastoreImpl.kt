@@ -11,14 +11,14 @@ class DatastoreImpl @Inject constructor(var context: Context): Datastore {
     val sharedPref= context.applicationContext.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
 
 
-    override fun addPassword(pass: String) {
-        sharedPref?.edit()?.putString("password", pass!!)?.apply()
+    override fun setPassword(pass: String) {
+        sharedPref?.edit()?.putString("password", pass)?.apply()
     }
     override fun getPassword():String  {
         return sharedPref?.getString("password", "") ?: ""
     }
 
-    override fun addToken(token: String) {
+    override fun setToken(token: String) {
         sharedPref?.edit()?.putString("token", token)?.apply()
     }
 
@@ -26,19 +26,19 @@ class DatastoreImpl @Inject constructor(var context: Context): Datastore {
         return sharedPref.getString("token", "") ?: ""
     }
 
-    override fun addBaseUrl(value: String) {
+    override fun setBaseUrl(value: String) {
         sharedPref?.edit()?.putString("baseurl", value)?.apply()
     }
 
     override fun getBaseUrl():String  {
-        return sharedPref?.getString("baseurl", "https://www.status-spar1ta.gr/") ?: ""
+        return sharedPref?.getString("baseurl", "https://www.status-sparta.gr/") ?: ""
     }
 
     override fun setLastLoginDate(value: String) {
         sharedPref?.edit()?.putString("lastLoginDate", value!!)?.apply()
     }
 
-    override fun addUsername(username: String) {
+    override fun setUsername(username: String) {
         sharedPref?.edit()?.putString("username", username)?.apply()
     }
 
@@ -50,7 +50,7 @@ class DatastoreImpl @Inject constructor(var context: Context): Datastore {
         return sharedPref?.getBoolean("useBearer", false) ?: false
     }
 
-    override fun addUseBearer(value: Boolean) {
+    override fun setUseBearer(value: Boolean) {
         sharedPref?.edit()?.putBoolean("useBearer", value)?.apply()
     }
 

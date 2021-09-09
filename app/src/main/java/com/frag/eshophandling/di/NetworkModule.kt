@@ -34,10 +34,9 @@ class NetworkModule {
 
         val interceptor = Interceptor { chain ->
             val url = chain.request().url.newBuilder().build()
-            println("basseeeee ${secureDatastore.getBaseUrl()}")
             val request = chain.request()
                 .newBuilder()
-                .addHeader("Authorization", "Bearer ${secureDatastore.getBaseUrl()}")
+                .addHeader("Authorization", "Bearer ${secureDatastore.getToken()}")
                 .url(url)
                 .build()
 
@@ -58,7 +57,7 @@ class NetworkModule {
             .addInterceptor(logging)
             .addInterceptor(interceptor)
         return Retrofit.Builder().client(okHttpClient1.build())
-            .baseUrl(Preferences.BaseUrl!!)//"https://www.status-sparta.gr/"
+            .baseUrl(secureDatastore.getBaseUrl())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiClient::class.java)

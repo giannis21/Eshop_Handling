@@ -1,11 +1,15 @@
 package com.frag.eshophandling.ui.viewmodels
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import com.frag.alertlocation_kotlin.utils.Preferences.username
+import com.frag.alertlocation_kotlin.utils.Preferences
+import com.frag.eshophandling.MainActivity
+import com.frag.eshophandling.data.api.NoInternetException
 import com.frag.eshophandling.data.api.RemoteRepository
 import com.frag.eshophandling.utils.Loading_dialog
 import com.frag.eshophandling.data.model.product_response.Data
@@ -13,6 +17,8 @@ import com.frag.eshophandling.data.model.submit_product.SubmittedProduct
 import com.frag.eshophandling.data.model.submit_products.Data1
 import com.frag.eshophandling.data.model.submit_products.SubmittedProducts
 import com.frag.eshophandling.di.MainActivityScope
+import com.frag.eshophandling.ui.login.LoginActivity
+import com.frag.eshophandling.utils.Datastore
 import com.frag.eshophandling.utils.milliToDate
 import kotlinx.coroutines.*
 import java.io.IOException
@@ -22,8 +28,9 @@ import javax.inject.Singleton
 import kotlin.jvm.Throws
 
 @Singleton
-class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository,var context: Context ) : ViewModel() {
+class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository,var context: Context ,var datastore: Datastore) : ViewModel() {
 
+    var showLoader = MutableLiveData<Boolean?>(null)
     var allProducts: MutableLiveData<MutableList<Data>>
     var allProducts_initial: MutableLiveData<MutableList<Data>>
     var loading = MutableLiveData<Boolean>(false)
@@ -50,35 +57,35 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
 
     val exceptionHandler = CoroutineExceptionHandler { _, e ->
         dialog.hideLoadingDialog()
+        showLoader.postValue(false)
         noInternetException.postValue(true)
-        job.cancel()
     }
 
     @Throws(IOException::class)
     fun getProduct(barcode: String?) {
         loading.postValue(true)
-
+        showLoader.postValue(true)
         dialog.displayLoadingDialog()
-        job = viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
+        viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
                 remoteRepository.getProduct(barcode ?: "0002")
             }.onFailure {
                 error.value= true
                 loading.postValue(false)
                 dialog.hideLoadingDialog()
-
-
+                showLoader.postValue(false)
             }.onSuccess {
                dialog.hideLoadingDialog()
+                showLoader.postValue(false)
                if(it.isSuccessful){
                    if(it.body()!!.success == 1 )
                       addProductToList(it.body()!!.data)
                }else{
                     loading.postValue(false)
 
-                   if(it.code() == 404){
+                    if(it.code() == 404){
                        productNotFound.postValue(true)
-                   } else{
+                    }else{
                        error.postValue(true)
                    }
                 }
@@ -89,6 +96,7 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
     private fun addProductToList(product: Data) {
 
         val product1 = allProducts.value?.find { it.id == product.id && it.sku == product.sku}
+
         if(product1 == null){
             productRetrieved.postValue(true)
             val tempList=allProducts.value!!
@@ -98,7 +106,6 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
             viewModelScope.launch(Dispatchers.Default) {
                 allProducts_initial.postValue(tempList)
             }
-
         }else{
             productExists.postValue(true)
         }
@@ -107,7 +114,7 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
 
     fun submitProduct(product: SubmittedProduct) {
         dialog.displayLoadingDialog()
-
+        showLoader.postValue(true)
        job= viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
                 remoteRepository.submitProduct(product)
@@ -115,12 +122,11 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
 
                 error.value= true
                 loading.postValue(false)
-                dialog.hideLoadingDialog()
-
+                showLoader.postValue(false)
 
             }.onSuccess {
                 loading.postValue(false)
-                dialog.hideLoadingDialog()
+                showLoader.postValue(false)
 
                 if(it.isSuccessful){
                     if(it.body()!!.success == 1 ) {
@@ -167,20 +173,20 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
 
     fun submitAllProducts(CardsShown: Boolean,productsSubmitted: (() -> Unit)?=null) {
         dialog.displayLoadingDialog()
-
+        showLoader.postValue(true)
         viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
-                remoteRepository.submitProducts(SubmittedProducts(getSubmittedProducts(CardsShown),username!!, milliToDate(Calendar.getInstance().timeInMillis.toString()),"${Build.MANUFACTURER} ${Build.MODEL}"))
+                remoteRepository.submitProducts(SubmittedProducts(getSubmittedProducts(CardsShown),datastore.getUsername(), milliToDate(Calendar.getInstance().timeInMillis.toString()),"${Build.MANUFACTURER} ${Build.MODEL}"))
             }.onFailure {
 
                 error.value= true
                 loading.postValue(false)
-                dialog.hideLoadingDialog()
+                showLoader.postValue(false)
 
             }.onSuccess {
 
                 loading.postValue(false)
-                dialog.hideLoadingDialog()
+                showLoader.postValue(false)
                 productsSubmitted?.invoke()
                 productsDeleted.postValue(true)
             }
@@ -198,7 +204,7 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
         }else{
             allProducts.value!!.forEachIndexed { index, data ->
                 val initial_quantity_value= allProducts_initial.value?.get(index)?.quantity
-                var substractedValue= if (data.quantity_minus == null ) "1" else data.quantity_minus
+                val substractedValue= if (data.quantity_minus == null ) "1" else data.quantity_minus
 
                 val saved_quantity=initial_quantity_value?.toInt()!! - substractedValue?.toInt()!!
 
@@ -209,6 +215,7 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
         return list_to_be_saved
     }
 
+    suspend fun logout() = remoteRepository.logout()
 
 }
 

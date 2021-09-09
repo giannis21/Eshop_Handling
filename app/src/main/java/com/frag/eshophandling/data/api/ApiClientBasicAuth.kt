@@ -1,6 +1,5 @@
 package com.frag.eshophandling.data.api
 
-import com.frag.alertlocation_kotlin.utils.Preferences.BaseUrl
 import com.frag.eshophandling.data.model.loginResponse.loginresponse.CredentialsResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

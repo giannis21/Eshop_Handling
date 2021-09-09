@@ -8,6 +8,7 @@ import com.frag.eshophandling.data.model.submit_product.SubmittedProductResponse
 import com.frag.eshophandling.data.model.submit_products.SubmittedProducts
 import com.frag.eshophandling.data.model.loginResponse.loginresponse.CredentialsResponse
 import com.frag.eshophandling.data.model.loginResponse.login.LoginUser
+import com.frag.eshophandling.data.model.loginResponse.logoutresponse.LogoutResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
@@ -16,6 +17,10 @@ class RemoteRepository @Inject constructor(private val my_Api: ApiClient, var ap
 
     suspend fun login(loginUser: LoginUser, url:String): Response<LoginUser> {
         return my_Api.login(loginUser,url)
+    }
+
+    suspend fun logout(): Response<LogoutResponse> {
+        return my_Api.logout()
     }
 
     suspend fun getCredentials(authToken: String,url:String): Response<CredentialsResponse> {

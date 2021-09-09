@@ -11,7 +11,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [NetworkModuleBasicAuth::class,NetworkModule::class,ViewModelModule::class])
+@Component(modules = [NetworkModuleBasicAuth::class,NetworkModule::class,ViewModelModule::class,AppSubcomponents::class])
 interface AppComponent {
     @Component.Factory
     interface Factory {
@@ -19,9 +19,9 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    //fun LoginComponent(): LoginComponent.Factory
+    fun loginComponent(): LoginComponent.Factory
 
-    fun inject(activity: LoginActivity)
+
     fun inject(activity: MainActivity)
     fun inject(cardsFragment: CardsFragment)
     fun inject(scannerFragment: ScannerFragment)

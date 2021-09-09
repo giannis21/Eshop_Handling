@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.frag.eshophandling.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class Loading_dialog(var context: Context) {
@@ -18,13 +21,16 @@ class Loading_dialog(var context: Context) {
 
 
     fun displayLoadingDialog() {
-//        if (view2.parent != null) {
-//            (view2.parent as ViewGroup).removeView(view2)
-//        }
-//
-//        builder.setView(view2)
-//        alertDialog1 = builder.create()
-//        alertDialog1.show()
+//        CoroutineScope(Dispatchers.Main).launch {
+////            if (view2.parent != null) {
+////                (view2.parent as ViewGroup).removeView(view2)
+////            }
+////
+////            builder.setView(view2)
+////            alertDialog1 = builder.create()
+////            alertDialog1.show()
+////        }
+
 
     }
 

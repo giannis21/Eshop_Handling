@@ -17,22 +17,13 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.frag.alertlocation_kotlin.utils.Preferences
-import com.frag.alertlocation_kotlin.utils.Preferences.BaseUrl
-import com.frag.alertlocation_kotlin.utils.Preferences.lastLoginDate
-import com.frag.alertlocation_kotlin.utils.Preferences.token
 import com.frag.eshophandling.MainActivity
 import com.frag.eshophandling.MyApplication
 import com.frag.eshophandling.R
-import com.frag.eshophandling.data.api.ApiClient
-import com.frag.eshophandling.data.api.ApiClientBasicAuth
-import com.frag.eshophandling.data.api.RemoteRepository
-import com.frag.eshophandling.data.api.NetworkConnectionIncterceptor
- import com.frag.eshophandling.ui.viewmodels.LoginViewModel
+import com.frag.eshophandling.ui.viewmodels.LoginViewModel
 import com.frag.eshophandling.utils.getDateInMilli
 import com.frag.eshophandling.utils.hideKeyboard
 import com.frag.eshophandling.utils.milliToDate
-import com.frag.eshophandling.ui.viewmodels.ViewmodelFactory
 import com.frag.eshophandling.utils.Datastore
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.banner_layout.view.*
@@ -46,7 +37,8 @@ class LoginActivity : AppCompatActivity() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
-    lateinit var DatastoreImpl: Datastore
+    lateinit var datastore: Datastore
+
     val viewModel: LoginViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
     }
@@ -56,8 +48,7 @@ class LoginActivity : AppCompatActivity() {
     private var isPasswordVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-       (application as MyApplication).appComponent.inject(this)
-     //   loginComponent.inject(this)
+        (application as MyApplication).appComponent.loginComponent().create().inject(this)
         super.onCreate(savedInstanceState)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -65,16 +56,14 @@ class LoginActivity : AppCompatActivity() {
         setStatusBarColor()
 
         window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        Preferences.sharedPref = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
-
-        val diff: Long = Calendar.getInstance().timeInMillis - getDateInMilli(lastLoginDate!!)
+        val diff: Long = Calendar.getInstance().timeInMillis - getDateInMilli(datastore.getLastLoginDate())
         val seconds = diff / 1000
         val minutes = seconds / 60
         val hours = minutes / 60
         val days = hours / 24
 
 
-        if (token?.isNotEmpty()!! && days <= 20) {
+        if (datastore.getToken().isNotEmpty() && days <= 20) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
@@ -160,9 +149,7 @@ class LoginActivity : AppCompatActivity() {
             temp = temp.removePrefix("http://")
         }
         temp = textViewHttp.text.toString() + temp + "/"
-
-        BaseUrl = temp
-        DatastoreImpl.addBaseUrl(temp)
+        datastore.setBaseUrl(temp)
         return temp + "api/rest_admin/oauth2/token/client_credentials"
     }
 
@@ -170,9 +157,8 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel.LoggedIn.observe(this, Observer {
             if (it) {
-                println("mpikee $it")
                 viewModel.LoggedIn.postValue(false)
-                lastLoginDate = milliToDate(Calendar.getInstance().timeInMillis.toString())
+                datastore.setLastLoginDate(milliToDate(Calendar.getInstance().timeInMillis.toString()))
                 startActivity(Intent(this, MainActivity::class.java))
             }
         })

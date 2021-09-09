@@ -1,8 +1,6 @@
     package com.frag.eshophandling.data.api
 
- import com.frag.alertlocation_kotlin.utils.Preferences
- import com.frag.alertlocation_kotlin.utils.Preferences.token
- import com.frag.eshophandling.MainActivity.Companion.errorListener
+
  import com.frag.eshophandling.data.model.product_response.Product
  import com.frag.eshophandling.data.model.submit_product.SubmittedProduct
  import com.frag.eshophandling.data.model.submit_product.SubmittedProductResponse

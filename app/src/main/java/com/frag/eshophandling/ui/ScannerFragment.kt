@@ -13,19 +13,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import com.frag.alertlocation_kotlin.utils.Preferences
 import com.frag.eshophandling.MainActivity
 import com.frag.eshophandling.MyApplication
 import com.frag.eshophandling.R
-import com.frag.eshophandling.data.api.ApiClient
-import com.frag.eshophandling.data.api.ApiClientBasicAuth
-import com.frag.eshophandling.data.api.NetworkConnectionIncterceptor
-import com.frag.eshophandling.data.api.RemoteRepository
 import com.frag.eshophandling.ui.viewmodels.SharedViewModel
+import com.frag.eshophandling.utils.Datastore
 import com.frag.eshophandling.utils.getDateInMilli
 import com.frag.eshophandling.utils.hideKeyboard
 import com.frag.eshophandling.utils.setSafeOnClickListener
-import com.frag.eshophandling.ui.viewmodels.ViewmodelFactory
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
@@ -47,6 +42,9 @@ import javax.inject.Inject
     }
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var datastore: Datastore
 
     val viewModel: SharedViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(SharedViewModel::class.java)
@@ -114,7 +112,7 @@ import javax.inject.Inject
                 })
 
 
-        val diff: Long = Calendar.getInstance().timeInMillis - getDateInMilli(Preferences.lastLoginDate!!)
+        val diff: Long = Calendar.getInstance().timeInMillis - getDateInMilli(datastore.getLastLoginDate())
         val seconds = diff / 1000
         val minutes = seconds / 60
         val hours = minutes / 60

@@ -1,11 +1,11 @@
 package com.frag.eshophandling.utils
 
 interface Datastore {
-    fun addUsername(username:String)
-    fun addPassword(pass:String)
-    fun addToken(token:String)
-    fun addUseBearer(value:Boolean)
-    fun addBaseUrl(value:String)
+    fun setUsername(username:String)
+    fun setPassword(pass:String)
+    fun setToken(token:String)
+    fun setUseBearer(value:Boolean)
+    fun setBaseUrl(value:String)
     fun setLastLoginDate(value:String)
 
     fun getUsername():String

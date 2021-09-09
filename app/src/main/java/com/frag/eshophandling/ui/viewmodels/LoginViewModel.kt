@@ -13,6 +13,7 @@ import com.frag.eshophandling.data.api.NoInternetException
 import com.frag.eshophandling.data.api.RemoteRepository
 import com.frag.eshophandling.data.model.loginResponse.login.LoginUser
 import com.frag.eshophandling.di.LoginActivityScope
+import com.frag.eshophandling.utils.Datastore
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,7 +25,7 @@ import javax.inject.Singleton
 import javax.net.ssl.SSLPeerUnverifiedException
 
 @Singleton
-class LoginViewModel @Inject constructor(var remoteRepository: RemoteRepository, var context: Context) : ViewModel() {
+class LoginViewModel @Inject constructor(var remoteRepository: RemoteRepository, var context: Context,var datastore: Datastore) : ViewModel() {
 
     var LoggedIn = MutableLiveData<Boolean>(false)
     var token1 =MutableLiveData<String>("")
@@ -46,32 +47,32 @@ class LoginViewModel @Inject constructor(var remoteRepository: RemoteRepository,
 
         viewModelScope.launch(exceptionHandler + Dispatchers.Default) {
             runCatching {
-                useBearer = false
+                datastore.setUseBearer(false)
                 remoteRepository.getCredentials(getAuthToken(),url)
             }.onFailure {
+                loading.postValue(false)
 
                 if(it is NoInternetException){
                     noInternetException.postValue(true)
                 }else if( it is UnknownHostException || it is SSLPeerUnverifiedException){
                     unknownHostException.postValue(true)
                 }
-                loading.postValue(false)
+
 
             }.onSuccess {
+                loading.postValue(false)
 
                  if(it.isSuccessful){
                      if(it.body()?.success == 1){
-                         token1.postValue(it.body()!!.data.access_token)
-                         token = it.body()!!.data.access_token
-                         Preferences.username= username
-                         Preferences.password= password
-                         validUrl.postValue(url)
+
+                         datastore.setToken(it.body()!!.data.access_token)
+                         datastore.setUsername(username)
+                         datastore.setPassword(password)
+
                          login(username,password)
                      }
                  }else{
-                     loading.postValue(false)
-                     println("user not Logged in ${it.errorBody()}")
-                     error?.postValue(true)
+                     error.postValue(true)
                  }
             }
         }
@@ -79,18 +80,20 @@ class LoginViewModel @Inject constructor(var remoteRepository: RemoteRepository,
 
 
     fun login(username: String ="admin", password: String  ="qwe123!") {
-        useBearer = true
+        datastore.setUseBearer(true)
         viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
-                val url = Preferences.BaseUrl+"api/rest_admin/login"
+                val url = datastore.getBaseUrl()+"api/rest_admin/login"
                 remoteRepository.login(LoginUser(username, password),url)
             }.onFailure {
+
                 if(it is NoInternetException){
                     noInternetException.postValue(true)
                 }
-                println(it.message)
-                token =""
+
+                datastore.setToken("")
                 loading.postValue(false)
+
             }.onSuccess {
                 loading.postValue(false)
 
