@@ -24,7 +24,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import javax.net.ssl.SSLPeerUnverifiedException
 
-@Singleton
+@LoginActivityScope
 class LoginViewModel @Inject constructor(var remoteRepository: RemoteRepository, var context: Context,var datastore: Datastore) : ViewModel() {
 
     var LoggedIn = MutableLiveData<Boolean>(false)
@@ -37,9 +37,9 @@ class LoginViewModel @Inject constructor(var remoteRepository: RemoteRepository,
     var unknownHostException=MutableLiveData<Boolean>()
     var invalid_creds=MutableLiveData<Boolean>()
     val exceptionHandler = CoroutineExceptionHandler { _, e ->
-
+        println("exceeeee ${e.message}")
         noInternetException.postValue(true)
-        job.cancel()
+      //  job.cancel()
     }
     fun getCredentials(username: String, password: String,url: String) {
         Preferences.sharedPref = context.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)

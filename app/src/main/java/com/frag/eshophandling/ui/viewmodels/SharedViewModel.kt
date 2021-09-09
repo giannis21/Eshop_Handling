@@ -27,7 +27,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.jvm.Throws
 
-@Singleton
+@MainActivityScope
 class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository,var context: Context ,var datastore: Datastore) : ViewModel() {
 
     var showLoader = MutableLiveData<Boolean?>(null)
@@ -59,14 +59,14 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
         dialog.hideLoadingDialog()
         showLoader.postValue(false)
         noInternetException.postValue(true)
+        println("exceeeee ${e.message}")
     }
 
-    @Throws(IOException::class)
     fun getProduct(barcode: String?) {
         loading.postValue(true)
         showLoader.postValue(true)
         dialog.displayLoadingDialog()
-        viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
+        viewModelScope.launch(exceptionHandler+Dispatchers.Default+ Job()) {
             runCatching {
                 remoteRepository.getProduct(barcode ?: "0002")
             }.onFailure {
@@ -103,9 +103,8 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
             tempList.add(product)
             allProducts.postValue(tempList)
             totalPrice += product.price.toFloat()
-            viewModelScope.launch(Dispatchers.Default) {
-                allProducts_initial.postValue(tempList)
-            }
+            allProducts_initial.postValue(tempList)
+
         }else{
             productExists.postValue(true)
         }
@@ -115,7 +114,7 @@ class SharedViewModel @Inject constructor(var remoteRepository: RemoteRepository
     fun submitProduct(product: SubmittedProduct) {
         dialog.displayLoadingDialog()
         showLoader.postValue(true)
-       job= viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
+        viewModelScope.launch(exceptionHandler+Dispatchers.Default) {
             runCatching {
                 remoteRepository.submitProduct(product)
             }.onFailure {

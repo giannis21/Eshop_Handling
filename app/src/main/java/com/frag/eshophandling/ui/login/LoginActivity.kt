@@ -48,7 +48,8 @@ class LoginActivity : AppCompatActivity() {
     private var isPasswordVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).appComponent.loginComponent().create().inject(this)
+        val component= (application as MyApplication).appComponent.loginComponent().create()
+        component.inject(this)
         super.onCreate(savedInstanceState)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -70,13 +71,15 @@ class LoginActivity : AppCompatActivity() {
             group.visibility = View.VISIBLE
         }
 
-
+        username_container.editText?.setText("admin")
+        password_container.editText?.setText("qwe123!")
+        url_container?.editText?.setText("www.Adrian-mol.com")
 
         submit_btn.setOnClickListener {
-            if (!fieldsFilled) {
-                showBanner("Πρέπει να συμπληρώσεις όλα τα πεδία!")
-                return@setOnClickListener
-            }
+//            if (!fieldsFilled) {
+//                showBanner("Πρέπει να συμπληρώσεις όλα τα πεδία!")
+//                return@setOnClickListener
+//            }
 
             window.decorView.rootView.hideKeyboard()
             viewModel.getCredentials(username_container.editText?.text.toString().trim(), password_container.editText?.text.toString().trim(), getAbsoluteUrl(url_container.editText?.text.toString().trim()))

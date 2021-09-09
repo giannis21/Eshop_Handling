@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.frag.eshophandling.di.MainComponent
 import com.frag.eshophandling.ui.login.LoginActivity
 import com.frag.eshophandling.ui.viewmodels.LoginViewModel
 import com.frag.eshophandling.ui.viewmodels.SharedViewModel
@@ -43,14 +44,16 @@ import javax.inject.Provider
      val viewModel: SharedViewModel by lazy {
          ViewModelProvider(this, viewModelFactory).get(SharedViewModel::class.java)
      }
+
+    lateinit  var mainComponent:MainComponent
     private var mainActivityAlive:Boolean=true
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).appComponent.inject(this)
+
+        mainComponent= (application as MyApplication).appComponent.mainComponent().create()
+        mainComponent.inject(this)
         super.onCreate(savedInstanceState)
-        // 5
-//        mainComponent = DaggerMainComponent.builder()
-//            .appComponent(appComp)
-//            .build()
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main2)
         //Preferences.sharedPref = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)

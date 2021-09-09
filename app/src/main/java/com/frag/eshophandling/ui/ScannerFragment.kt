@@ -259,7 +259,7 @@ import javax.inject.Inject
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-       (activity?.application as MyApplication).appComponent.inject(this)
+        (activity as MainActivity).mainComponent.inject(this)
         //   (context as MainComponentProvider).get().inject(this)
     }
 

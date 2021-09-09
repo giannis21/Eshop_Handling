@@ -11,7 +11,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [NetworkModuleBasicAuth::class,NetworkModule::class,ViewModelModule::class,AppSubcomponents::class])
+@Component(modules = [NetworkModuleBasicAuth::class,NetworkModule::class,FactoryModule::class,AppSubcomponents::class])
 interface AppComponent {
     @Component.Factory
     interface Factory {
@@ -20,10 +20,11 @@ interface AppComponent {
     }
 
     fun loginComponent(): LoginComponent.Factory
+    fun mainComponent(): MainComponent.Factory
 
-
-    fun inject(activity: MainActivity)
-    fun inject(cardsFragment: CardsFragment)
-    fun inject(scannerFragment: ScannerFragment)
-    fun inject(settingsFragment: SettingsFragment)
+//
+//    fun inject(activity: MainActivity)
+//    fun inject(cardsFragment: CardsFragment)
+//    fun inject(scannerFragment: ScannerFragment)
+//    fun inject(settingsFragment: SettingsFragment)
 }

@@ -45,6 +45,7 @@ private const val ARG_PARAM2 = "param2"
 //typealias MainComponentProvider = Provider<MainComponent>
 
 class CardsFragment : Fragment(),ItemHandler {
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -373,6 +374,7 @@ class CardsFragment : Fragment(),ItemHandler {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (activity?.application as MyApplication).appComponent.inject(this)
+        (activity as MainActivity).mainComponent.inject(this)
+
     }
 }
