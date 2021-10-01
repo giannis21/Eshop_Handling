@@ -84,7 +84,7 @@ class SharedViewModel(var remoteRepository: RemoteRepository, var context: Conte
 
     private fun addProductToList(product: Data) {
 
-        val product1 = allProducts.value?.find { it.id == product.id && it.sku == product.sku}
+        val product1 = allProducts.value?.find {it.sku == product.sku}
         if(product1 == null){
             productRetrieved.postValue(true)
             val tempList=allProducts.value!!
