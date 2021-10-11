@@ -5,3 +5,4 @@ data class CredentialsResponse(
         val error: List<Any>,
         val success: Int
 )
+
