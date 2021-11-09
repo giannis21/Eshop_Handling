@@ -17,7 +17,7 @@ data class Data(
         return if (price.contains(".")) {
             val commaIndex = price.indexOf(".")
             val length = price.length
-            if (length - commaIndex > 3) {
+            if (length - commaIndex > 5) {
                 price.take(commaIndex + 2)
             } else
                 price

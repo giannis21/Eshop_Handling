@@ -179,7 +179,7 @@ class CardAdapter(var context: Context, products: MutableList<Data>, private var
                 {
                       val commaIndex= text.indexOf(".")
                       val length= text.length
-                      if(length-commaIndex > 3){
+                      if(length-commaIndex > 5){
                           text = text.substring(0, text.length-1)
                           holder.viewCardsBinding.priceEdittext.setText(text)
                           holder.viewCardsBinding.priceEdittext.setSelection(holder.viewCardsBinding.priceEdittext.text.length)
